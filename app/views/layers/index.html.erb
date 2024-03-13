@@ -1,29 +1,75 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Layers</h1>
+<div class="container">
+  <section class="tools-board">
+    <div class="row">
+      <label class="title">Layers</label>
+      <ul class="layers">
+        <input type="text" class="layer type-text" placeholder="Background" disabled>
+        <input type="text" class="layer type-text" placeholder="Title">
+        <input type="textarea" class="layer type-textarea" placeholder="Content">
+        <li class="layer">
+          <input type="checkbox" id="fill-color">
+          <label for="fill-color">Fill color</label>
+        </li>
+      </ul>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Order</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <div class="row buttons">
+      <button class="clear-canvas">Clear Canvas</button>
+      <button class="save-img">Save As Image</button>
+    </div>
+  </section>
+  
+  <section class="drawing-board">
+    <canvas></canvas>
+  </section>
 
-  <tbody>
-    <% @layers.each do |layer| %>
-      <tr>
-        <td><%= layer.name %></td>
-        <td><%= layer.order %></td>
-        <td><%= link_to 'Show', layer %></td>
-        <td><%= link_to 'Edit', edit_layer_path(layer) %></td>
-        <td><%= link_to 'Destroy', layer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <section class="tools-board">
+    <div class="row">
+      <label class="title">Layers</label>
+      <ul class="layers">
+        <li class="layer tool" id="rectangle">
+          <input type="text" id="fill-color">
+          <span>Text</span>
+        </li>
+        <li class="layer">
+          <input type="checkbox" id="fill-color">
+          <label for="fill-color">Fill color</label>
+        </li>
+      </ul>
+    </div>
+    <div class="row">
+      <label class="title">layers</label>
+      <ul class="layers">
+        <li class="layer active tool" id="brush">
+          <span>Brush</span>
+        </li>
+        <li class="layer tool" id="eraser">
+          <span>Eraser</span>
+        </li>
+        <li class="layer">
+          <input type="range" id="size-slider" min="1" max="30" value="5">
+        </li>
+      </ul>
+    </div>
+    <div class="row colors">
+      <label class="title">Colors</label>
+      <ul class="layers">
+        <li class="layer"></li>
+        <li class="layer selected"></li>
+        <li class="layer"></li>
+        <li class="layer"></li>
+        <li class="layer">
+          <input type="color" id="color-picker" value="#4A98F7">
+        </li>
+      </ul>
+    </div>
+    <div class="row buttons">
+      <button class="clear-canvas">Clear Canvas</button>
+      <button class="save-img">Save As Image</button>
+    </div>
+  </section>
+</div>
 
-<br>
-
-<%= link_to 'New Layer', new_layer_path %>
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'layers' %>
