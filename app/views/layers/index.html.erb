@@ -4,63 +4,78 @@
     <div class="row">
       <label class="title">Layers</label>
       <ul class="layers">
-        <input type="text" class="layer type-text" placeholder="Background" disabled>
-        <input type="text" class="layer type-text" placeholder="Title">
-        <input type="textarea" class="layer type-textarea" placeholder="Content">
         <li class="layer">
-          <input type="checkbox" id="fill-color">
-          <label for="fill-color">Fill color</label>
+          <input type="checkbox" class="select">
+          <input type="text" class="type-text" placeholder="Background" disabled>
+        </li>
+        <li class="layer">
+          <input type="checkbox" class="select">
+          <input type="text" class="type-text" placeholder="Text">
+        </li>
+        <li class="layer layer-textarea">
+          <input type="checkbox" class="select">
+          <textarea class="type-textarea" placeholder="Long Text" rows="3"></textarea>
         </li>
       </ul>
     </div>
 
     <div class="row buttons">
-      <button class="clear-canvas">Clear Canvas</button>
-      <button class="save-img">Save As Image</button>
+      <button class="delete-last-layer">Delete Last Layer</button>
+      <div class="add-buttons">
+        <button class="add-layer add-text-botton">Add Text</button>
+        <div class="space"></div>
+        <button class="add-layer">Add Long Text</button>
+      </div>
     </div>
   </section>
   
-  <section class="drawing-board">
+  <section class="canvas-board">
     <canvas></canvas>
+    <textarea id="textInput" class="text-input" rows="4" cols="50">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</textarea>
   </section>
 
-  <section class="tools-board">
+  <section class="detail-board">
     <div class="row">
-      <label class="title">Layers</label>
-      <ul class="layers">
-        <li class="layer tool" id="rectangle">
-          <input type="text" id="fill-color">
-          <span>Text</span>
+      <label class="title">Detail</label>
+      <ul class="detail">
+        <li class="attribute">
+          <div class="label-attribute">Font:</div>
+          <select class="input-attribute" id="fontSelect">
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+          </select>
         </li>
-        <li class="layer">
-          <input type="checkbox" id="fill-color">
-          <label for="fill-color">Fill color</label>
+        <li class="attribute">
+          <span>Color:</span>
+          <input class="input-attribute" type="color" id="colorPicker" value="#000000">
         </li>
-      </ul>
-    </div>
-    <div class="row">
-      <label class="title">layers</label>
-      <ul class="layers">
-        <li class="layer active tool" id="brush">
-          <span>Brush</span>
+        <li class="attribute">
+          <div class="label-attribute">Size:</div>
+          <select class="input-attribute" id="fontSizeSelect">
+            <option value="12">12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="20">20</option>
+            <option value="22">22</option>
+            <option value="24">24</option>
+          </select>
         </li>
-        <li class="layer tool" id="eraser">
-          <span>Eraser</span>
+        <li class="attribute">
+          <div class="label-attribute">Text Align:</div>
+          <select class="input-attribute" id="textAlignSelect">
+            <option value="Center">Center</option>
+            <option value="Left">Left</option>
+            <option value="Right">Right</option>
+          </select>
         </li>
-        <li class="layer">
-          <input type="range" id="size-slider" min="1" max="30" value="5">
-        </li>
-      </ul>
-    </div>
-    <div class="row colors">
-      <label class="title">Colors</label>
-      <ul class="layers">
-        <li class="layer"></li>
-        <li class="layer selected"></li>
-        <li class="layer"></li>
-        <li class="layer"></li>
-        <li class="layer">
-          <input type="color" id="color-picker" value="#4A98F7">
+        <li class="attribute">
+          <div class="label-attribute">Text Type:</div>
+          <select class="input-attribute" id="textAlignSelect">
+            <option value="Bold">Bold</option>
+            <option value="Italic">Italic</option>
+          </select>
         </li>
       </ul>
     </div>

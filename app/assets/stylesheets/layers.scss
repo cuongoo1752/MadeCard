@@ -1,7 +1,3 @@
-// Place all the styles related to the Layers controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
-/* Import Google font - Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 *{
   margin: 0;
@@ -13,7 +9,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 93vh;
   background: #4A98F7;
 }
 .container{
@@ -26,25 +22,35 @@ body{
 section{
   background: #fff;
   border-radius: 7px;
+  height: 494px;
 }
-.tools-board{
+.tools-board, .detail-board{
   width: 210px;
   padding: 15px 22px 0;
 }
-.tools-board .row{
+.tools-board .row, .detail-board .row{
   margin-bottom: 20px;
 }
-.row .layers{
+.row .layers, .row .detail{
   list-style: none;
   margin: 10px 0 0 5px;
+  height: 333px;
 }
+
+.row .layers{
+  overflow: auto;
+}
+
 .row .layers .layer{
   cursor: pointer;
   align-items: center;
   margin-bottom: 5px;
   border: 1px solid #dfdfdf;
-  line-height: 31px;
+  line-height: 30px;
+  display: flex;
+  height: 30px;
 }
+
 .layer:is(:hover, .active) img{
   filter: invert(17%) sepia(90%) saturate(3000%) hue-rotate(900deg) brightness(100%) contrast(100%);
 }
@@ -57,10 +63,12 @@ section{
 .layer:is(:hover, .active) :where(span, label){
   color: #4A98F7;
 }
-.layer #fill-color{
+.layer .select{
   cursor: pointer;
   height: 14px;
   width: 14px;
+  margin: 3px;
+  border: 1px solid #dfdfdf;
 }
 #fill-color:checked ~ label{
   color: #4A98F7;
@@ -70,33 +78,18 @@ section{
   height: 5px;
   margin-top: 10px;
 }
-.colors .layers{
+.colors .layers, .colors .detail{
   display: flex;
   justify-content: space-between;
 }
-.colors .layer{
+.colors .layer, .colors .attribute{
   height: 20px;
   width: 20px;
   border-radius: 50%;
   margin-top: 3px;
   position: relative;
 }
-.colors .layer:nth-child(1){
-  background-color: #fff;
-  border: 1px solid #bfbfbf;
-}
-.colors .layer:nth-child(2){
-  background-color: #000;
-}
-.colors .layer:nth-child(3){
-  background-color: #E02020;
-}
-.colors .layer:nth-child(4){
-  background-color: #6DD400;
-}
-.colors .layer:nth-child(5){
-  background-color: #4A98F7;
-}
+
 .colors .layer.selected::before{
   position: absolute;
   content: "";
@@ -112,6 +105,11 @@ section{
 .colors .layer:first-child.selected::before{
   border-color: #ccc;
 }
+
+.colors .attribute:first-child.selected::before{
+  border-color: #ccc;
+}
+
 .layer #color-picker{
   opacity: 0;
   cursor: pointer;
@@ -121,37 +119,91 @@ section{
   color: #fff;
   border: none;
   outline: none;
-  padding: 11px 0;
-  font-size: 0.9rem;
-  margin-bottom: 13px;
+  padding: 9px 0;
+  font-size: 10px;
+  font-weight: bolder;
+  margin-bottom: 6px;
   background: none;
   border-radius: 4px;
   cursor: pointer;
 }
-.buttons .clear-canvas{
+.buttons .delete-last-layer{
   color: #6C757D;
   border: 1px solid #6C757D;
   transition: all 0.3s ease;
 }
-.clear-canvas:hover{
+.delete-last-layer:hover{
   color: #fff;
   background: #6C757D;
 }
-.buttons .save-img{
+.buttons .add-layer{
   background: #4A98F7;
   border: 1px solid #4A98F7;
 }
-.drawing-board{
+.canvas-board{
   flex: 1;
   overflow: hidden;
 }
-.drawing-board canvas{
+.canvas-board canvas{
   width: 100%;
   height: 100%;
 }
 
 .type-text, .type-textarea{
-  width: 161px;
+  width: 122px;
   padding-left: 9px;
   border: transparent;
+}
+
+.type-textarea{
+  padding-top: 4px;
+}
+
+.row .layers .layer-textarea{
+  height: auto;
+}
+
+.add-buttons{
+  display: flex;
+}
+
+.space{
+  width: 5px;
+}
+
+.buttons .add-text-botton{
+  width: 108px;
+}
+
+.toolbar {
+  margin-bottom: 10px;
+}
+
+.canvas-board{
+  position: relative;
+}
+
+.text-input{
+  font-family: Arial;
+  font-size: 14px;
+  width: 400px;
+  height: 200px;
+  position: absolute;
+  top: 50px;
+  left: 40px;
+}
+
+.row .detail .attribute{
+  cursor: pointer;
+  align-items: center;
+  margin-bottom: 5px;
+  line-height: 30px;
+  display: flex;
+  height: 30px;
+  justify-content: space-between;
+}
+
+.input-attribute{
+  width: 82px;
+  border: 1px solid #dfdfdf;
 }

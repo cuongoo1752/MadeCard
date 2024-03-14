@@ -1,3 +1,4 @@
+/*
 const canvas = document.querySelector("canvas"),
   toolBtns = document.querySelectorAll(".tool"),
   fillColor = document.querySelector("#fill-color"),
@@ -148,3 +149,30 @@ canvas.addEventListener("mousemove", drawing);
 canvas.addEventListener("mouseup", () => (isDrawing = false));
 
 console.log('load layers done')
+*/
+
+
+$(document).ready(function() {
+  $('#fontSelect').change(function() {
+      var font = $(this).val();
+      $('#textInput').css('font-family', font);
+  });
+
+  $('#colorPicker').change(function() {
+      var color = $(this).val();
+      $('#textInput').css('color', color);
+  });
+
+  $('#fontSizeSelect').change(function() {
+      var size = $(this).val() + 'px';
+      $('#textInput').css('font-size', size);
+  });
+
+  $('#boldBtn').click(function() {
+      $('#textInput').toggleClass('bold');
+  });
+
+  $('#italicBtn').click(function() {
+      $('#textInput').toggleClass('italic');
+  });
+});
