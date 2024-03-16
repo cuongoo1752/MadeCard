@@ -7,37 +7,42 @@
         <li class="layer">
           <input type="checkbox" class="select">
           <input type="text" class="type-text" placeholder="Background" disabled>
+          <%= image_tag("background/back.jpg", alt: "Background", style: "display: none", id: "imageInput") %>
         </li>
-        <li class="layer">
+        <li class="layer layer-template-text"  style="display: none;">
           <input type="checkbox" class="select">
-          <input type="text" class="type-text" placeholder="Text">
+          <textarea class="type-text" placeholder="Text" rows="1"></textarea>
+          <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
         </li>
-        <li class="layer layer-textarea">
+        <li class="layer layer-textarea layer-template-textarea" style="display: none;">
           <input type="checkbox" class="select">
           <textarea class="type-textarea" placeholder="Long Text" rows="3"></textarea>
+          <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
         </li>
+        <li class="layer" style="display: none;">
+          <input type="checkbox" class="select">
+          <input type="file" accept="image/*">
+          <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
+        </li> 
       </ul>
-    </div>
-
-    <div class="row buttons">
-      <button class="delete-last-layer">Delete Last Layer</button>
-      <div class="add-buttons">
-        <button class="add-layer add-text-botton">Add Text</button>
-        <div class="space"></div>
-        <button class="add-layer">Add Long Text</button>
-      </div>
     </div>
   </section>
   
   <section class="canvas-board">
-    <canvas></canvas>
-    <textarea id="textInput" class="text-input" rows="4" cols="50">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</textarea>
+    <%# <textarea id="textInput" class="text-input" rows="4" cols="50">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</textarea> %>
+    <div id="resizable">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+    </div>
+    <div class="resizer top-left"></div>
+    <div class="resizer top-right"></div>
+    <div class="resizer bottom-left"></div>
+    <div class="resizer bottom-right"></div>
   </section>
 
   <section class="detail-board">
-    <div class="row">
-      <label class="title">Detail</label>
-      <ul class="detail">
+    <div class="row row-board">
+      <label class="title">Detail layer</label>
+      <ul class="detail detail-template" style="display: none;">
         <li class="attribute">
           <div class="label-attribute">Font:</div>
           <select class="input-attribute" id="fontSelect">
@@ -65,26 +70,41 @@
         <li class="attribute">
           <div class="label-attribute">Text Align:</div>
           <select class="input-attribute" id="textAlignSelect">
-            <option value="Center">Center</option>
-            <option value="Left">Left</option>
-            <option value="Right">Right</option>
+            <option class="align-center" value="Center">Center</option>
+            <option class="align-left" value="Left">Left</option>
+            <option class="align-right" value="Right">Right</option>
+          </select>
+        </li>
+        <li class="attribute">
+          <div class="label-attribute">Vertical:</div>
+          <select class="input-attribute" id="textVerticalSelect">
+            <option class="text-top" value="Bold">Top</option>
+            <option class="text-middle" value="Italic">Middle</option>
+            <option class="text-bottom" value="Italic">Bottom</option>
           </select>
         </li>
         <li class="attribute">
           <div class="label-attribute">Text Type:</div>
-          <select class="input-attribute" id="textAlignSelect">
-            <option value="Bold">Bold</option>
-            <option value="Italic">Italic</option>
+          <select class="input-attribute" id="textTypeSelect">
+            <option class="text-bold" value="Bold">Bold</option>
+            <option class="text-italic" value="Italic">Italic</option>
           </select>
         </li>
       </ul>
     </div>
+
     <div class="row buttons">
-      <button class="clear-canvas">Clear Canvas</button>
-      <button class="save-img">Save As Image</button>
+      <button id="deleteLastLayer" class="delete-last-layer">Delete Last Layer</button>
+      <div class="add-buttons">
+        <button id="addText" class="add-layer add-text-botton">Add Text</button>
+        <div class="space"></div>
+        <button id="addLongText" class="add-layer">Add Long Text</button>
+      </div>
+      <button id="addImageAndTextBtn" class="add-layer">Add Image</button>
     </div>
   </section>
 </div>
 
 <%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery-ui' %>
 <%= javascript_include_tag 'layers' %>
