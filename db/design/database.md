@@ -5,15 +5,17 @@ Table users {
   password varchar
   role varchar
   status integer
+  order integer 
   created_at timestamp
   updated_at timestamp
 }
 
 Table cards {
   id integer [primary key]
+  is_public bool
   status integer
-  creator integer
-  updater integer
+  order integer 
+  user_id integer
   created_at timestamp
   updated_at timestamp
 }
@@ -23,10 +25,10 @@ Table layers_on_card {
   name varchar
   card_id integer
   layer_id integer
-  layer_type string
+  layer_type varchar
+  order integer
   status integer
-  creator integer
-  updater integer
+  user_id integer
   created_at timestamp
   updated_at timestamp
 }
@@ -35,6 +37,9 @@ Table images {
   id integer [primary key]
   name varchar
   url varchar
+  status integer
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table texts {
@@ -47,14 +52,17 @@ Table texts {
   text_align varchar
   vertical varchar
   text_type varchar
+  status integer
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table events {
   id integer [primary key]
   content varchar
   status integer
-  creator integer
-  updater integer
+  order integer 
+  user_id integer
   created_at timestamp
   updated_at timestamp
 }
@@ -64,8 +72,8 @@ Table categories {
   event_id integer
   content varchar
   status integer
-  creator integer
-  updater integer
+  order integer 
+  user_id integer
   created_at timestamp
   updated_at timestamp
 }
@@ -75,8 +83,8 @@ Table wishes {
   category_id integer
   content text
   status integer
-  creator integer
-  updater integer
+  order integer 
+  user_id integer
   created_at timestamp
   updated_at timestamp
 }
@@ -89,9 +97,10 @@ Ref: layers_on_card.layer_id - texts.id
 Ref: events.id < categories.event_id
 Ref: categories.id < wishes.category_id
 
-Ref: events.creator > users.id
-Ref: categories.creator > users.id
-Ref: wishes.creator > users.id
-Ref: layers_on_card.creator > users.id
+Ref: events.user_id > users.id
+Ref: categories.user_id > users.id
+Ref: wishes.user_id > users.id
+Ref: cards.user_id > users.id
+Ref: layers_on_card.user_id > users.id
 ```
 

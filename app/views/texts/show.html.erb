@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Context:</strong>
+  <%= @text.context %>
+</p>
+
+<p>
+  <strong>Is long:</strong>
+  <%= @text.is_long %>
+</p>
+
+<p>
+  <strong>Font:</strong>
+  <%= @text.font %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @text.color %>
+</p>
+
+<p>
+  <strong>Size:</strong>
+  <%= @text.size %>
+</p>
+
+<p>
+  <strong>Text align:</strong>
+  <%= @text.text_align %>
+</p>
+
+<p>
+  <strong>Vertical:</strong>
+  <%= @text.vertical %>
+</p>
+
+<p>
+  <strong>Text type:</strong>
+  <%= @text.text_type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @text.status %>
+</p>
+
+<%= link_to 'Edit', edit_text_path(@text) %> |
+<%= link_to 'Back', texts_path %>

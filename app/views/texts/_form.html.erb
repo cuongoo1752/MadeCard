@@ -1,0 +1,62 @@
+<%= form_with(model: text) do |form| %>
+  <% if text.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(text.errors.count, "error") %> prohibited this text from being saved:</h2>
+
+      <ul>
+        <% text.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :context %>
+    <%= form.text_area :context %>
+  </div>
+
+  <div class="field">
+    <%= form.label :is_long %>
+    <%= form.check_box :is_long %>
+  </div>
+
+  <div class="field">
+    <%= form.label :font %>
+    <%= form.text_field :font %>
+  </div>
+
+  <div class="field">
+    <%= form.label :color %>
+    <%= form.text_field :color %>
+  </div>
+
+  <div class="field">
+    <%= form.label :size %>
+    <%= form.number_field :size %>
+  </div>
+
+  <div class="field">
+    <%= form.label :text_align %>
+    <%= form.text_field :text_align %>
+  </div>
+
+  <div class="field">
+    <%= form.label :vertical %>
+    <%= form.text_field :vertical %>
+  </div>
+
+  <div class="field">
+    <%= form.label :text_type %>
+    <%= form.text_field :text_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.number_field :status %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

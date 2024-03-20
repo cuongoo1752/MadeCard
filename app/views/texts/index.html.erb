@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Texts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Context</th>
+      <th>Is long</th>
+      <th>Font</th>
+      <th>Color</th>
+      <th>Size</th>
+      <th>Text align</th>
+      <th>Vertical</th>
+      <th>Text type</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @texts.each do |text| %>
+      <tr>
+        <td><%= text.context %></td>
+        <td><%= text.is_long %></td>
+        <td><%= text.font %></td>
+        <td><%= text.color %></td>
+        <td><%= text.size %></td>
+        <td><%= text.text_align %></td>
+        <td><%= text.vertical %></td>
+        <td><%= text.text_type %></td>
+        <td><%= text.status %></td>
+        <td><%= link_to 'Show', text %></td>
+        <td><%= link_to 'Edit', edit_text_path(text) %></td>
+        <td><%= link_to 'Destroy', text, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Text', new_text_path %>

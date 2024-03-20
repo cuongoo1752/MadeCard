@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Event:</strong>
+  <%= @category.event_id %>
+</p>
+
+<p>
+  <strong>Context:</strong>
+  <%= @category.context %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @category.status %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @category.user_id %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @category.order %>
+</p>
+
+<%= link_to 'Edit', edit_category_path(@category) %> |
+<%= link_to 'Back', categories_path %>

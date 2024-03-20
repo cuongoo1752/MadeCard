@@ -3,6 +3,7 @@ class LayersController < ApplicationController
 
   # GET /layers or /layers.json
   def index
+    @open_bootstrap = true
     @layers = Layer.all
   end
 

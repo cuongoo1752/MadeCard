@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @layers_on_card.name %>
+</p>
+
+<p>
+  <strong>Card:</strong>
+  <%= @layers_on_card.card_id %>
+</p>
+
+<p>
+  <strong>Layer:</strong>
+  <%= @layers_on_card.layer_id %>
+</p>
+
+<p>
+  <strong>Layer type:</strong>
+  <%= @layers_on_card.layer_type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @layers_on_card.status %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @layers_on_card.order %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @layers_on_card.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_layers_on_card_path(@layers_on_card) %> |
+<%= link_to 'Back', layers_on_cards_path %>
