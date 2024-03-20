@@ -1,0 +1,52 @@
+<%= form_with(model: layers_on_card) do |form| %>
+  <% if layers_on_card.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(layers_on_card.errors.count, "error") %> prohibited this layers_on_card from being saved:</h2>
+
+      <ul>
+        <% layers_on_card.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :card_id %>
+    <%= form.text_field :card_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :layer_id %>
+    <%= form.number_field :layer_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :layer_type %>
+    <%= form.text_field :layer_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.number_field :status %>
+  </div>
+
+  <div class="field">
+    <%= form.label :order %>
+    <%= form.number_field :order %>
+  </div>
+
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

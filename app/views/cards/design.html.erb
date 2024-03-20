@@ -1,0 +1,109 @@
+<%= stylesheet_link_tag 'design', media: 'all', 'data-turbolinks-track': 'reload' %>
+<div class="container">
+  <section class="tools-board">
+    <div class="row">
+      <label class="title">Layers</label>
+      <ul class="layers">
+        <li class="layer">
+          <input type="checkbox" class="select">
+          <input type="text" class="type-text" placeholder="Background" disabled>
+          <%= image_tag("background/back.jpg", alt: "Background", style: "display: none", id: "imageInput") %>
+        </li>
+        <li class="layer layer-template-text"  style="display: none;">
+          <input type="checkbox" class="select">
+          <textarea class="type-text" placeholder="Text" rows="1"></textarea>
+          <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
+        </li>
+        <li class="layer layer-textarea layer-template-textarea" style="display: none;">
+          <input type="checkbox" class="select">
+          <textarea class="type-textarea" placeholder="Long Text" rows="3"></textarea>
+          <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
+        </li>
+        <li class="layer" style="display: none;">
+          <input type="checkbox" class="select">
+          <input type="file" accept="image/*">
+          <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
+        </li> 
+      </ul>
+    </div>
+  </section>
+  
+  <section class="canvas-board">
+    <div id="resizable">
+      <p><%= @content %></p>
+      <div class="resizer top-left"></div>
+      <div class="resizer top-right"></div>
+      <div class="resizer bottom-left"></div>
+      <div class="resizer bottom-right"></div>
+    </div>
+  </section>
+
+  <section class="detail-board">
+    <div class="row row-board">
+      <label class="title">Detail layer</label>
+      <ul class="detail detail-template" style="display: none;">
+        <li class="attribute">
+          <div class="label-attribute">Font:</div>
+          <select class="input-attribute" id="fontSelect">
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+          </select>
+        </li>
+        <li class="attribute">
+          <span>Color:</span>
+          <input class="input-attribute" type="color" id="colorPicker" value="#000000">
+        </li>
+        <li class="attribute">
+          <div class="label-attribute">Size:</div>
+          <select class="input-attribute" id="fontSizeSelect">
+            <option value="12">12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="20">20</option>
+            <option value="22">22</option>
+            <option value="24">24</option>
+          </select>
+        </li>
+        <li class="attribute">
+          <div class="label-attribute">Text Align:</div>
+          <select class="input-attribute" id="textAlignSelect">
+            <option class="align-center" value="Center">Center</option>
+            <option class="align-left" value="Left">Left</option>
+            <option class="align-right" value="Right">Right</option>
+          </select>
+        </li>
+        <li class="attribute">
+          <div class="label-attribute">Vertical:</div>
+          <select class="input-attribute" id="textVerticalSelect">
+            <option class="text-top" value="Bold">Top</option>
+            <option class="text-middle" value="Italic">Middle</option>
+            <option class="text-bottom" value="Italic">Bottom</option>
+          </select>
+        </li>
+        <li class="attribute">
+          <div class="label-attribute">Text Type:</div>
+          <select class="input-attribute" id="textTypeSelect">
+            <option class="text-bold" value="Bold">Bold</option>
+            <option class="text-italic" value="Italic">Italic</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row buttons">
+      <button id="deleteLastLayer" class="delete-last-layer">Delete Last Layer</button>
+      <div class="add-buttons">
+        <button id="addText" class="add-layer add-text-botton">Add Text</button>
+        <div class="space"></div>
+        <button id="addLongText" class="add-layer">Add Long Text</button>
+      </div>
+      <button id="addImageAndTextBtn" class="add-layer">Add Image</button>
+    </div>
+  </section>
+</div>
+
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery-ui' %>
+<%= javascript_include_tag 'design' %>
