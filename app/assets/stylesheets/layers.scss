@@ -1,3 +1,297 @@
-// Place all the styles related to the Layers controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 93vh;
+  background: #4a98f7;
+}
+.container {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  padding: 10px;
+  max-width: 1250px;
+}
+section {
+  background: #fff;
+  border-radius: 0px;
+}
+
+.tools-board,
+.detail-board {
+  width: 210px;
+  padding: 12px 14px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.tools-board .row,
+.detail-board .row {
+  margin-bottom: 8px;
+}
+
+.row .detail {
+  list-style: none;
+  margin: 10px 0 0 5px;
+}
+
+.title {
+  font-weight: bolder;
+}
+
+.row .layers {
+  list-style: none;
+  margin: 10px 0 0 0;
+  overflow: auto;
+  height: 420px;
+}
+
+.row .layers .layer {
+  cursor: pointer;
+  align-items: center;
+  margin-bottom: 5px;
+  border: 1px solid #dfdfdf;
+  line-height: 30px;
+  display: flex;
+  height: 30px;
+}
+
+.layer:is(:hover, .active) img {
+  filter: invert(17%) sepia(90%) saturate(3000%) hue-rotate(900deg)
+    brightness(100%) contrast(100%);
+}
+
+.layer :where(span, label) {
+  color: #5a6168;
+  cursor: pointer;
+  padding-left: 10px;
+}
+.layer:is(:hover, .active) :where(span, label) {
+  color: #4a98f7;
+}
+.layer .select {
+  cursor: pointer;
+  height: 14px;
+  width: 14px;
+  margin: 4px;
+  border: 1px solid #dfdfdf;
+}
+#fill-color:checked ~ label {
+  color: #4a98f7;
+}
+.layer #size-slider {
+  width: 100%;
+  height: 5px;
+  margin-top: 10px;
+}
+.colors .layers,
+.colors .detail {
+  display: flex;
+  justify-content: space-between;
+}
+.colors .layer,
+.colors .attribute {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin-top: 3px;
+  position: relative;
+}
+
+.colors .layer.selected::before {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  height: 12px;
+  width: 12px;
+  background: inherit;
+  border-radius: inherit;
+  border: 2px solid #fff;
+  transform: translate(-50%, -50%);
+}
+.colors .layer:first-child.selected::before {
+  border-color: #ccc;
+}
+
+.colors .attribute:first-child.selected::before {
+  border-color: #ccc;
+}
+
+.layer #color-picker {
+  opacity: 0;
+  cursor: pointer;
+}
+.buttons button {
+  width: 100%;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 9px 0;
+  font-size: 10px;
+  font-weight: bolder;
+  margin-bottom: 6px;
+  background: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.buttons .delete-last-layer {
+  color: #6c757d;
+  border: 1px solid #6c757d;
+  transition: all 0.3s ease;
+}
+.delete-last-layer:hover {
+  color: #fff;
+  background: #6c757d;
+}
+.buttons .add-layer {
+  background: #4a98f7;
+  border: 1px solid #4a98f7;
+}
+
+.type-text,
+.type-textarea {
+  width: 143px;
+  padding-left: 9px;
+  border: transparent;
+}
+
+.type-textarea {
+  padding-top: 4px;
+}
+
+.row .layers .layer-textarea,
+.row .layers .layer-text {
+  height: auto;
+}
+
+.add-buttons {
+  display: flex;
+}
+
+.space {
+  width: 5px;
+}
+
+.buttons .add-text-botton {
+  width: 108px;
+}
+
+.toolbar {
+  margin-bottom: 10px;
+}
+
+.delete-layer {
+  border: none;
+  background-color: transparent;
+}
+
+.svg-delete {
+  width: 10px;
+  filter: invert(87%) sepia(0%) saturate(0%) hue-rotate(126deg) brightness(104%)
+    contrast(96%);
+  margin: 3px;
+  margin-top: 8px;
+}
+
+.layer-select {
+  background: #63aaff;
+}
+
+// Canvas Board
+.canvas-board {
+  position: relative;
+  border-radius: 0px;
+}
+
+.text-input {
+  font-family: Arial;
+  font-size: 14px;
+  width: 400px;
+  height: 200px;
+  position: absolute;
+  top: 50px;
+  left: 40px;
+}
+
+// Detail Board
+.row .detail .attribute {
+  cursor: pointer;
+  align-items: center;
+  margin-bottom: 5px;
+  line-height: 30px;
+  display: flex;
+  height: 30px;
+  justify-content: space-between;
+}
+
+.input-attribute {
+  width: 82px;
+  border: 1px solid #dfdfdf;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+// handle resizable
+
+#resizable {
+  border: 1px solid #4a98f7;
+  position: absolute;
+  top: 70px;
+  left: 100px;
+  right: 100px;
+  bottom: 100px;
+}
+
+.resizer {
+  width: 8px;
+  height: 8px;
+  background-color: #4a98f7;
+  position: absolute;
+  cursor: move;
+}
+
+.top-left {
+  top: -4px;
+  left: -4px;
+}
+
+.top-right {
+  top: -4px;
+  right: -4px;
+}
+
+.bottom-left {
+  bottom: -4px;
+  left: -4px;
+}
+
+.bottom-right {
+  bottom: -4px;
+  right: -4px;
+}
