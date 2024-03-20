@@ -1,24 +1,16 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Cơ sở dữ liệu 
+## Mô tả các bảng 
+| STT |    Tên bảng    |                                                                                                                  Cột                                                                                                                  |                                  Ý nghĩa của bảng                                  |
+|:---:|:--------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------:|
+|  1  | users          | id, username, password, role, status, create_at, updated_at                                                                                                                                                                           | Lưu thông tin người dùng đăng nhập vào hệ thống hoặc các người dùng admin          |
+|  2  | cards          | id, is_public, status, creator(khóa ngoại của users), updater, created_at, updated_at                                                                                                                                                 | Lưu thông tin thiệp                                                                |
+|  3  | layers_on_card | id, name, card_id(khóa ngoại của bản cards), layer_id(khóa ngoại của bảng images, texts,...), layer_type(giúp nhận diện lại layer là images hoặc texts hoặc…), status, creator(khóa ngoại của users), updater, created_at, updated_at | Lưu thông tin chung của layer của một thiệp(cards). 1 thiệp có thể có nhiều layer. |
+|  4  | images         | id, name, url                                                                                                                                                                                                                         | Lưu thông tin của layer ảnh, là một loại layer                                     |
+|  5  | texts          | id, content, is_long, font, color, size, text_align, vertical, type_type                                                                                                                                                              | Lưu thông tin của layer text, là một loại layer                                    |
+|  6  | events         | id, content, status, creator(khóa ngoại của users), updater, created_at, updated_at                                                                                                                                                   | Lưu thông tin các dịp lễ. Ví dụ: Ngày phụ nữ Việt Nam 20/10                        |
+|  7  | categories     | id, event_id(khóa ngoại của events), content, status, creator(khóa ngoại của users), updater, created_at, updated_at                                                                                                                  | Lưu thông tin nhóm lời chúc trong sự kiện. Ví dụ: Nhóm lời chúc người yêu          |
+|  8  | wishes         | id, category_id(khóa ngoại của categories), content, status, creator(khóa ngoại của users), updater, created_at, updated_at                                                                                                           | Lưu thông tin lời chúc. Nhiều lời chúc cùng một nhóm(category)                     |
+## Ảnh các bảng trong database
+![image database](./db/design/Made%20Card.png)
+Link: https://dbdiagram.io/d/Made-Card-65fa9a35ae072629ce7b70e3
+Database code: [Code database](./db/design/database.md)
