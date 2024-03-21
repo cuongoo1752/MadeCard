@@ -7,7 +7,6 @@ class CardsController < ApplicationController
   end
 
   def design
-    @open_bootstrap = true
     if params[:wish_id].present?
       @content = Wish.where(id: params[:wish_id]).first&.context
     end

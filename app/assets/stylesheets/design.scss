@@ -6,12 +6,17 @@
   font-family: "Poppins", sans-serif;
 }
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 93vh;
   background: #4a98f7;
+  height: 100%;
 }
+
+.box{
+  height: 97vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
   display: flex;
   width: 100%;
@@ -19,6 +24,7 @@ body {
   padding: 10px;
   max-width: 1250px;
 }
+
 section {
   background: #fff;
   border-radius: 0px;
