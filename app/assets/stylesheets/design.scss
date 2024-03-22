@@ -1,16 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
 }
+
 body {
   background: #4a98f7;
   height: 100%;
 }
 
-.box{
+.title {
+  font-size: 15px;
+}
+
+.box {
   height: 97vh;
   display: flex;
   justify-content: center;
@@ -43,6 +46,11 @@ section {
   margin-bottom: 8px;
 }
 
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
 .row .detail {
   list-style: none;
   margin: 10px 0 0 5px;
@@ -66,7 +74,7 @@ section {
   border: 1px solid #dfdfdf;
   line-height: 30px;
   display: flex;
-  height: 30px;
+  height: 32px;
 }
 
 .layer:is(:hover, .active) img {
@@ -167,6 +175,7 @@ section {
   width: 143px;
   padding-left: 9px;
   border: transparent;
+  line-height: 22px;
 }
 
 .type-textarea {

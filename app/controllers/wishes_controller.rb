@@ -65,6 +65,6 @@ class WishesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def wish_params
-      params.require(:wish).permit(:category_id, :context, :status, :user_id, :order)
+      params.require(:wish).permit(:category_id, :content, :status, :user_id, :order)
     end
 end

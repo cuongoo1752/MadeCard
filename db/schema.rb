@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_20_102557) do
+ActiveRecord::Schema.define(version: 2024_03_22_145422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2024_03_20_102557) do
 
   create_table "categories", force: :cascade do |t|
     t.bigint "event_id", null: false
-    t.string "context"
+    t.string "content"
     t.integer "status"
     t.bigint "user_id", null: false
     t.integer "order"
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 2024_03_20_102557) do
   end
 
   create_table "texts", force: :cascade do |t|
-    t.text "context"
+    t.text "content"
     t.boolean "is_long"
     t.string "font"
     t.string "color"
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 2024_03_20_102557) do
 
   create_table "wishes", force: :cascade do |t|
     t.bigint "category_id", null: false
-    t.text "context"
+    t.text "content"
     t.integer "status"
     t.bigint "user_id", null: false
     t.integer "order"

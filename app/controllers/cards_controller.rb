@@ -8,7 +8,8 @@ class CardsController < ApplicationController
 
   def design
     if params[:wish_id].present?
-      @content = Wish.where(id: params[:wish_id]).first&.context
+      @title = "Chúc mừng ngày Phụ nữ Việt Nam 08/03"
+      @content = Wish.where(id: params[:wish_id]).first&.content
     end
   end
 

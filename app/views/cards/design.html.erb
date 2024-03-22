@@ -1,5 +1,5 @@
 <%= stylesheet_link_tag 'design', media: 'all', 'data-turbolinks-track': 'reload' %>
-<div class="box">
+<form class="box">
   <div class="container">
     <section class="tools-board">
       <div class="row">
@@ -12,12 +12,12 @@
           </li>
           <li class="layer layer-template-text"  style="display: none;">
             <input type="checkbox" class="select">
-            <textarea class="type-text" placeholder="Lời chúc" rows="1"></textarea>
+            <textarea class="text type-text" placeholder="Lời chúc" rows="1"></textarea>
             <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
           </li>
           <li class="layer layer-textarea layer-template-textarea" style="display: none;">
             <input type="checkbox" class="select">
-            <textarea class="type-textarea" placeholder="Lời chúc dài" rows="3"></textarea>
+            <textarea class="text type-textarea" placeholder="Lời chúc dài" rows="3"></textarea>
             <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
           </li>
           <li class="layer" style="display: none;">
@@ -104,7 +104,10 @@
       </div>
     </section>
   </div>
-</div>
+</form>
+
+<%= hidden_field_tag 'wish_title', @title.to_s %>
+<%= hidden_field_tag 'wish_content', @content.to_s %>
 
 <%= javascript_include_tag 'jquery' %>
 <%= javascript_include_tag 'jquery-ui' %>

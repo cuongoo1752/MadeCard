@@ -1,13 +1,13 @@
-function logVar(content) {
-  console.log(`${Object.keys({ content })[0]}: ${content}`);
-}
-
 // set index default
 var index = 0;
 function getIndex() {
   index++;
   return index;
 }
+
+// Load data from controller
+const wish_title = $("#wish_title").val();
+const wish_content = $("#wish_content").val();
 
 // set current select index default
 const NOT_SELECT = -1;
@@ -38,7 +38,7 @@ img.on("load", function () {
 
 img.attr("src", $("#imageInput").attr("src"));
 
-function addLayerText(type) {
+function addLayerText(type, content) {
   let indexLayer = getIndex();
   let $newLayer = $(`.layer-template-${type}`)
     .clone()
@@ -46,6 +46,7 @@ function addLayerText(type) {
     .removeAttr("style")
     .attr("index", indexLayer);
   $(".layers").append($newLayer);
+  $(`.layer[index=${indexLayer}] .text`).val(content)
 
   if (type == "text" || type == "textarea") {
     let $newDetailLayer = $(".detail-template")
@@ -56,15 +57,18 @@ function addLayerText(type) {
   }
 }
 
-$("#deleteLastLayer").click(function () {
+$("#deleteLastLayer").click(function (event) {
+  event.preventDefault();
   $(".layers li:last-child").remove();
 });
 
-$("#addText").click(function () {
+$("#addText").click(function (event) {
+  event.preventDefault();
   addLayerText("text");
 });
 
-$("#addLongText").click(function () {
+$("#addLongText").click(function (event) {
+  event.preventDefault();
   addLayerText("textarea");
 });
 
@@ -86,9 +90,6 @@ $(".layers").on("click", ".layer", function () {
     "display: block;"
   );
 });
-
-addLayerText("text");
-addLayerText("textarea");
 
 // Handle detail layer
 $("#fontSelect").change(function () {
@@ -124,3 +125,6 @@ $("#resizable").draggable({
     });
   },
 });
+
+addLayerText("text", wish_title);
+addLayerText("textarea", wish_content);
