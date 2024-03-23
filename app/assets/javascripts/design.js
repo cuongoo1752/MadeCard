@@ -1,15 +1,20 @@
-// set index default
+// Khởi tạo giá trị index của layer
 var index = 0;
-function getIndex() {
+function AddAndGetIndex() {
   index++;
+  $("#index").val(index);
   return index;
 }
 
-// Load data from controller
+function getIndex() {
+  return index;
+}
+
+// Tạo giá trị từ controller
 const wish_title = $("#wish_title").val();
 const wish_content = $("#wish_content").val();
 
-// set current select index default
+// Khởi tạo giá trị index đang chọn
 const NOT_SELECT = -1;
 var currentSelectIndex = NOT_SELECT;
 function setCurrentSelectIndex(selectIndex) {
@@ -20,7 +25,7 @@ function getCurrentSelectIndex() {
   return currentSelectIndex;
 }
 
-// Handle canvas
+// Xử lý canvas
 const imageInput = $("#imageInput");
 
 var img = $("<img/>");
@@ -36,19 +41,31 @@ img.on("load", function () {
   $(".canvas-board").css("width", this.width).css("height", this.height);
 });
 
+function nameLayer(layerType, indexLayer) {
+  return `layer_${layerType}_${indexLayer}`;
+}
+
 img.attr("src", $("#imageInput").attr("src"));
 
-function addLayerText(type, content) {
-  let indexLayer = getIndex();
+function addLayerText(type, content = "") {
+  // Tạo layer ở phần các lớp
+  let indexLayer = AddAndGetIndex();
   let $newLayer = $(`.layer-template-${type}`)
     .clone()
     .removeClass(`layer-template-${type}`)
     .removeAttr("style")
     .attr("index", indexLayer);
   $(".layers").append($newLayer);
-  $(`.layer[index=${indexLayer}] .text`).val(content)
 
-  if (type == "text" || type == "textarea") {
+  // Đổi content nếu có
+  let $inputText = $(`.layer[index=${indexLayer}] .text`);
+  $inputText.val(content);
+
+  // Thêm name có index để đánh dấu
+  $inputText.attr("name", nameLayer(type, indexLayer));
+
+  // Tạo detail của text
+  if (type == "text" || type == "textLong") {
     let $newDetailLayer = $(".detail-template")
       .clone()
       .removeClass("detail-template")
@@ -57,33 +74,38 @@ function addLayerText(type, content) {
   }
 }
 
+// Xóa layer cuối
 $("#deleteLastLayer").click(function (event) {
   event.preventDefault();
   $(".layers li:last-child").remove();
 });
 
+// Tạo layer text ngắn
 $("#addText").click(function (event) {
   event.preventDefault();
   addLayerText("text");
 });
 
+// Tạo layer text dài
 $("#addLongText").click(function (event) {
   event.preventDefault();
-  addLayerText("textarea");
+  addLayerText("textLong");
 });
 
+// Xóa layer
 $(".layers").on("click", ".delete-layer", function () {
   $(this).closest(".layer").remove();
 });
 
+// Khi click và layer
 $(".layers").on("click", ".layer", function () {
-  // add UI layer
+  // Hiển thị UI layer
   $(".layer").removeClass("layer-select");
   let $layerSelect = $(this).closest(".layer");
   $layerSelect.addClass("layer-select");
   setCurrentSelectIndex($layerSelect.attr("index"));
 
-  // display detail layer
+  // Thêm chi tiết layer
   $(".detail").attr("style", "display: none;");
   $(`.detail[index="${getCurrentSelectIndex()}"]`).attr(
     "style",
@@ -91,7 +113,11 @@ $(".layers").on("click", ".layer", function () {
   );
 });
 
-// Handle detail layer
+// Xử lý khi thay đổi chi tiết layer
+for (let i = 1; i <= getIndex(); i++) {
+  // Thực hiện các công việc cần thiết trong vòng lặp
+}
+
 $("#fontSelect").change(function () {
   var font = $(this).val();
   $("#textInput").css("font-family", font);
@@ -126,5 +152,6 @@ $("#resizable").draggable({
   },
 });
 
+// Tạo dữ liệu ban đầu
 addLayerText("text", wish_title);
-addLayerText("textarea", wish_content);
+addLayerText("textLong", wish_content);

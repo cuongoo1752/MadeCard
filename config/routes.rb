@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :cards do
     collection do
       get 'design', to: 'cards#design'
+      post 'create_card_and_layers', to: 'cards#create_card_and_layers'
     end
   end
   resources :users

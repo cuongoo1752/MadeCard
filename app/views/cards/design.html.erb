@@ -1,6 +1,7 @@
 <%= stylesheet_link_tag 'design', media: 'all', 'data-turbolinks-track': 'reload' %>
-<form class="box">
+<%= form_tag(create_card_and_layers_cards_path, class: "box") do %>
   <div class="container">
+    <%# Phần hiển thị các lớp %>
     <section class="tools-board">
       <div class="row">
         <label class="title">Các lớp</label>
@@ -15,7 +16,7 @@
             <textarea class="text type-text" placeholder="Lời chúc" rows="1"></textarea>
             <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
           </li>
-          <li class="layer layer-textarea layer-template-textarea" style="display: none;">
+          <li class="layer layer-textarea layer-template-textLong" style="display: none;">
             <input type="checkbox" class="select">
             <textarea class="text type-textarea" placeholder="Lời chúc dài" rows="3"></textarea>
             <button class="delete-layer"><%= image_tag("icon/xmark-solid.svg", alt: "x", class: "svg-delete") %></button>
@@ -29,6 +30,7 @@
       </div>
     </section>
     
+    <%# Phần hiển thị ảnh %>
     <section class="canvas-board">
       <div id="resizable">
         <p><%= @content %></p>
@@ -39,13 +41,14 @@
       </div>
     </section>
 
+    <%# Phần hiển thị các thuộc tính %>
     <section class="detail-board">
       <div class="row row-board">
         <label class="title">Thuộc tính của lớp</label>
         <ul class="detail detail-template" style="display: none;">
           <li class="attribute">
             <div class="label-attribute">Font chữ:</div>
-            <select class="input-attribute" id="fontSelect">
+            <select class="input-attribute input-text-font">
               <option value="Arial">Arial</option>
               <option value="Times New Roman">Times New Roman</option>
               <option value="Verdana">Verdana</option>
@@ -53,11 +56,11 @@
           </li>
           <li class="attribute">
             <span>Màu sắc:</span>
-            <input class="input-attribute" type="color" id="colorPicker" value="#000000">
+            <input class="input-attribute input-text-color" type="color" value="#000000">
           </li>
           <li class="attribute">
             <div class="label-attribute">Kích thước:</div>
-            <select class="input-attribute" id="fontSizeSelect">
+            <select class="input-attribute input-text-size">
               <option value="12">12</option>
               <option value="14">14</option>
               <option value="16">16</option>
@@ -68,16 +71,16 @@
             </select>
           </li>
           <li class="attribute">
-            <div class="label-attribute">Căn chỉnh ngang:</div>
-            <select class="input-attribute" id="textAlignSelect">
+            <div class="label-attribute">Căn ngang:</div>
+            <select class="input-attribute input-text-align">
               <option class="align-center" value="Center">Giữa</option>
               <option class="align-left" value="Left">Trái</option>
               <option class="align-right" value="Right">Phải</option>
             </select>
           </li>
           <li class="attribute">
-            <div class="label-attribute">Căn chỉnh dọc:</div>
-            <select class="input-attribute" id="textVerticalSelect">
+            <div class="label-attribute">Căn dọc:</div>
+            <select class="input-attribute input-text-vertical">
               <option class="text-top" value="Top">Trên</option>
               <option class="text-middle" value="Middle">Giữa</option>
               <option class="text-bottom" value="Bottom">Dưới</option>
@@ -85,7 +88,7 @@
           </li>
           <li class="attribute">
             <div class="label-attribute">Loại chữ:</div>
-            <select class="input-attribute" id="textTypeSelect">
+            <select class="input-attribute input-text-type">
               <option class="text-bold" value="Bold">In đậm</option>
               <option class="text-italic" value="Italic">In nghiêng</option>
             </select>
@@ -104,7 +107,9 @@
       </div>
     </section>
   </div>
-</form>
+
+  <%= hidden_field_tag 'index', 1 %>
+<% end %>
 
 <%= hidden_field_tag 'wish_title', @title.to_s %>
 <%= hidden_field_tag 'wish_content', @content.to_s %>
