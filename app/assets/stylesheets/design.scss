@@ -1,17 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
 }
+
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 93vh;
   background: #4a98f7;
+  height: 100%;
 }
+
+.title {
+  font-size: 15px;
+}
+
+.box {
+  height: 97vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
   display: flex;
   width: 100%;
@@ -19,6 +27,7 @@ body {
   padding: 10px;
   max-width: 1250px;
 }
+
 section {
   background: #fff;
   border-radius: 0px;
@@ -35,6 +44,11 @@ section {
 .tools-board .row,
 .detail-board .row {
   margin-bottom: 8px;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .row .detail {
@@ -60,7 +74,7 @@ section {
   border: 1px solid #dfdfdf;
   line-height: 30px;
   display: flex;
-  height: 30px;
+  height: 32px;
 }
 
 .layer:is(:hover, .active) img {
@@ -161,6 +175,7 @@ section {
   width: 143px;
   padding-left: 9px;
   border: transparent;
+  line-height: 22px;
 }
 
 .type-textarea {
@@ -237,6 +252,10 @@ section {
   border: 1px solid #dfdfdf;
 }
 
+.input-number {
+  height: 21px;
+}
+
 .align-center {
   text-align: center;
 }
@@ -257,15 +276,14 @@ section {
   font-style: italic;
 }
 
-// handle resizable
+// handle box-layer
 
-#resizable {
+.box-layer {
   border: 1px solid #4a98f7;
   position: absolute;
   top: 70px;
   left: 100px;
-  right: 100px;
-  bottom: 100px;
+  cursor: move;
 }
 
 .resizer {

@@ -65,6 +65,6 @@ class TextsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def text_params
-      params.require(:text).permit(:context, :is_long, :font, :color, :size, :text_align, :vertical, :text_type, :status)
+      params.require(:text).permit(:content, :is_long, :font, :color, :size, :text_align, :vertical, :text_type, :status)
     end
 end

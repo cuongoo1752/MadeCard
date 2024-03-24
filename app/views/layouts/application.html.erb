@@ -8,22 +8,16 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_link_tag 'scaffolds', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <% if @open_bootstrap.nil? %>
-      <%= stylesheet_link_tag 'bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
-      <%= stylesheet_link_tag 'use_bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <% end %>
+    <%= stylesheet_link_tag 'bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'use_bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'custom' %>
   </head>
 
   <body>
-    <% if @open_bootstrap.nil? %>
-      <%= render "./layouts/navbar.html.erb" %>
-    <% end %>
+  <%= render "./layouts/navbar.html.erb" %>
 
-    <%= yield %>
+  <%= yield %>
   </body>
-  <% if @open_bootstrap.nil? %>
-    <%= javascript_include_tag 'jquery_slim', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'bootstrap_bundle', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <% end %>
+  <%= javascript_include_tag 'jquery_slim', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'bootstrap_bundle', media: 'all', 'data-turbolinks-track': 'reload' %>
 </html>

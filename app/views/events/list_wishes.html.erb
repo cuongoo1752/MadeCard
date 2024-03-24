@@ -5,10 +5,10 @@
 <% @categories.each do |category| %>
   <div class="media">
     <div class="media-body">
-      <h3 class="mt-0"><%= category.context %></h3>
+      <h3 class="mt-0"><%= category.content %></h3>
       <br>
       <% Wish.where(category_id: category.id).each do |wish| %>
-        <p><%= wish.context %> <a class="" href="<%= design_cards_path(wish_id: wish.id) %>">Nhấn vào đây để tạo thiệp</a></p>
+        <p><%= wish.content %> <a class="" href="<%= design_cards_path(wish_id: wish.id) %>">Nhấn vào đây để tạo thiệp</a></p>
       <% end %>
     </div>
   </div>
