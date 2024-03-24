@@ -252,6 +252,10 @@ section {
   border: 1px solid #dfdfdf;
 }
 
+.input-number {
+  height: 21px;
+}
+
 .align-center {
   text-align: center;
 }
@@ -272,15 +276,14 @@ section {
   font-style: italic;
 }
 
-// handle resizable
+// handle box-layer
 
-#resizable {
+.box-layer {
   border: 1px solid #4a98f7;
   position: absolute;
   top: 70px;
   left: 100px;
-  right: 100px;
-  bottom: 100px;
+  cursor: move;
 }
 
 .resizer {

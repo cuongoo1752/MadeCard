@@ -8,9 +8,11 @@ class CardsController < ApplicationController
   end
 
   def design
+    @layers_on_cards = []
     if params[:wish_id].present?
-      @title = "Chúc mừng ngày Phụ nữ Việt Nam 08/03"
-      @content = Wish.where(id: params[:wish_id]).first&.content
+      wish = Wish.where(id: params[:wish_id]).first
+      @title = Category.find_by(id: wish.category_id)&.content
+      @content = wish&.content
     end
   end
 
@@ -46,10 +48,10 @@ class CardsController < ApplicationController
     params.each do |key, value|
       next if value.blank?
 
-      list_key = key.split("_")
+      list_key = key.split("@")
       if list_key.size == 3 && list_key.first == "layer"
         layer_type = list_key[1]
-        layer_index = list_key[3]
+        layer_index = list_key[2]
         params_layer_on_card = {
           name: "", 
           card_id: @card.id,
@@ -65,6 +67,9 @@ class CardsController < ApplicationController
             is_long: is_long, 
             content: value
           }.merge(create_params)
+          ["font", "color", "size", "text_align", "vertical", "text_type", "width", "height", "top", "left"].each do |attribute|
+            params_text[:"#{attribute}"] = params[:"detailLayer@#{attribute}@#{layer_index}"]
+          end
           params_layer_on_card[:layer] = Text.create!(params_text)
         end
 

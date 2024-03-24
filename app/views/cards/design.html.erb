@@ -32,8 +32,8 @@
     
     <%# Phần hiển thị ảnh %>
     <section class="canvas-board">
-      <div id="resizable">
-        <p><%= @content %></p>
+      <div class="box-layer box-layer-text box-layer-text-template" style="display: none;">
+        <p class="text-content"></p>
         <div class="resizer top-left"></div>
         <div class="resizer top-right"></div>
         <div class="resizer bottom-left"></div>
@@ -51,7 +51,7 @@
             <select class="input-attribute input-text-font">
               <option value="Arial">Arial</option>
               <option value="Times New Roman">Times New Roman</option>
-              <option value="Verdana">Verdana</option>
+              <option value="verdana">Verdana</option>
             </select>
           </li>
           <li class="attribute">
@@ -60,15 +60,7 @@
           </li>
           <li class="attribute">
             <div class="label-attribute">Kích thước:</div>
-            <select class="input-attribute input-text-size">
-              <option value="12">12</option>
-              <option value="14">14</option>
-              <option value="16">16</option>
-              <option value="18">18</option>
-              <option value="20">20</option>
-              <option value="22">22</option>
-              <option value="24">24</option>
-            </select>
+            <input class="input-attribute input-number input-text-size" value="12" type="number" min="1" max="200">
           </li>
           <li class="attribute">
             <div class="label-attribute">Căn ngang:</div>
@@ -81,29 +73,39 @@
           <li class="attribute">
             <div class="label-attribute">Căn dọc:</div>
             <select class="input-attribute input-text-vertical">
-              <option class="text-top" value="Top">Trên</option>
-              <option class="text-middle" value="Middle">Giữa</option>
-              <option class="text-bottom" value="Bottom">Dưới</option>
+              <option class="text-top" value="top">Trên</option>
+              <option class="text-middle" value="middle">Giữa</option>
+              <option class="text-bottom" value="bottom">Dưới</option>
             </select>
           </li>
           <li class="attribute">
             <div class="label-attribute">Loại chữ:</div>
             <select class="input-attribute input-text-type">
-              <option class="text-bold" value="Bold">In đậm</option>
-              <option class="text-italic" value="Italic">In nghiêng</option>
+              <option class="text-normal" value="normal">Bình thường</option>
+              <option class="text-bold" value="bold">In đậm</option>
+              <option class="text-italic" value="italic">In nghiêng</option>
             </select>
           </li>
+          <li class="attribute">
+            <div class="label-attribute">Chiều rộng:</div>
+            <input class="input-attribute input-number input-text-width" type="number" min="1" max="1000">
+          </li>
+          <li class="attribute">
+            <div class="label-attribute">Chiều dài:</div>
+            <input class="input-attribute input-number input-text-height" type="number" min="1" max="1000">
+          </li>
+          <input class="input-attribute input-text-top" type="hidden">
+          <input class="input-attribute input-text-left" type="hidden">
         </ul>
       </div>
 
       <div class="row buttons">
-        <button id="deleteLastLayer" class="delete-last-layer">Xóa lớp cuối</button>
         <div class="add-buttons">
           <button id="addText" class="add-layer add-text-botton">Thêm lớp lời chúc</button>
           <div class="space"></div>
           <button id="addLongText" class="add-layer">Thêm lờp lời chúc dài</button>
         </div>
-        <button id="addImageAndTextBtn" class="add-layer">Thêm ảnh</button>
+        <button id="addImageAndTextBtn" class="add-layer">Lưu thiết kế</button>
       </div>
     </section>
   </div>

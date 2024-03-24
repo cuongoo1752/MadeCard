@@ -42,7 +42,11 @@ img.on("load", function () {
 });
 
 function nameLayer(layerType, indexLayer) {
-  return `layer_${layerType}_${indexLayer}`;
+  return `layer@${layerType}@${indexLayer}`;
+}
+
+function nameDetailLayer(layerAttribute, indexLayer) {
+  return `detailLayer@${layerAttribute}@${indexLayer}`;
 }
 
 img.attr("src", $("#imageInput").attr("src"));
@@ -59,26 +63,133 @@ function addLayerText(type, content = "") {
 
   // Đổi content nếu có
   let $inputText = $(`.layer[index=${indexLayer}] .text`);
-  $inputText.val(content);
+  $inputText.attr("index", indexLayer).val(content);
 
   // Thêm name có index để đánh dấu
   $inputText.attr("name", nameLayer(type, indexLayer));
 
-  // Tạo detail của text
-  if (type == "text" || type == "textLong") {
-    let $newDetailLayer = $(".detail-template")
-      .clone()
-      .removeClass("detail-template")
-      .attr("index", indexLayer);
-    $(".row-board").append($newDetailLayer);
-  }
-}
+  let defaultWidthText = 600;
+  let defaultHeightText = 50;
+  let topText = 70;
+  let leftText = 75;
 
-// Xóa layer cuối
-$("#deleteLastLayer").click(function (event) {
-  event.preventDefault();
-  $(".layers li:last-child").remove();
-});
+  let defaultWidthTextLong = 600;
+  let defaultHeightTextLong = 200;
+  let topTextLong = 130;
+  let leftTextLong = 75;
+  // Tạo detail của text
+  let $newDetailLayer = $(".detail-template")
+    .clone()
+    .removeClass("detail-template")
+    .attr("index", indexLayer);
+  $(".row-board").append($newDetailLayer);
+
+  $(`.detail[index=${indexLayer}] .input-text-font`)
+    .attr("name", nameDetailLayer("font", indexLayer))
+    .attr("index", indexLayer);
+
+  $(`.detail[index=${indexLayer}] .input-text-color`)
+    .attr("name", nameDetailLayer("color", indexLayer))
+    .attr("index", indexLayer);
+
+  $(`.detail[index=${indexLayer}] .input-text-size`)
+    .attr("name", nameDetailLayer("size", indexLayer))
+    .attr("index", indexLayer);
+
+  $(`.detail[index=${indexLayer}] .input-text-align`)
+    .attr("name", nameDetailLayer("text_align", indexLayer))
+    .attr("index", indexLayer);
+
+  $(`.detail[index=${indexLayer}] .input-text-vertical`)
+    .attr("name", nameDetailLayer("vertical", indexLayer))
+    .attr("index", indexLayer);
+
+  $(`.detail[index=${indexLayer}] .input-text-type`)
+    .attr("name", nameDetailLayer("text_type", indexLayer))
+    .attr("index", indexLayer);
+
+  if (type == "text") {
+    $(`.detail[index=${indexLayer}] .input-text-width`)
+      .attr("name", nameDetailLayer("width", indexLayer))
+      .attr("index", indexLayer)
+      .val(defaultWidthText);
+
+    $(`.detail[index=${indexLayer}] .input-text-height`)
+      .attr("name", nameDetailLayer("height", indexLayer))
+      .attr("index", indexLayer)
+      .val(defaultHeightText);
+
+    $(`.detail[index=${indexLayer}] .input-text-top`)
+      .attr("name", nameDetailLayer("top", indexLayer))
+      .attr("index", indexLayer)
+      .val(topText);
+
+    $(`.detail[index=${indexLayer}] .input-text-left`)
+      .attr("name", nameDetailLayer("left", indexLayer))
+      .attr("index", indexLayer)
+      .val(leftText);
+  } else if (type == "textLong") {
+    $(`.detail[index=${indexLayer}] .input-text-width`)
+      .attr("name", nameDetailLayer("width", indexLayer))
+      .attr("index", indexLayer)
+      .val(defaultWidthTextLong);
+
+    $(`.detail[index=${indexLayer}] .input-text-height`)
+      .attr("name", nameDetailLayer("height", indexLayer))
+      .attr("index", indexLayer)
+      .val(defaultHeightTextLong);
+
+    $(`.detail[index=${indexLayer}] .input-text-top`)
+      .attr("name", nameDetailLayer("top", indexLayer))
+      .attr("index", indexLayer)
+      .val(topTextLong);
+
+    $(`.detail[index=${indexLayer}] .input-text-left`)
+      .attr("name", nameDetailLayer("left", indexLayer))
+      .attr("index", indexLayer)
+      .val(leftTextLong);
+  }
+
+  // Tạo box text
+  let $newBoxLayerText = $(`.box-layer-text-template`)
+    .clone()
+    .removeClass(`box-layer-text-template`)
+    .removeAttr("style")
+    .attr("index", indexLayer);
+  $(".canvas-board").append($newBoxLayerText);
+  // Gán giá trị default
+  if (type == "text") {
+    $(`.box-layer-text[index=${indexLayer}]`).css({
+      width: defaultWidthText,
+      height: defaultHeightText,
+      top: topText,
+      left: leftText,
+    });
+  } else if (type == "textLong") {
+    $(`.box-layer-text[index=${indexLayer}]`).css({
+      width: defaultWidthTextLong,
+      height: defaultHeightTextLong,
+      top: topTextLong,
+      left: leftTextLong,
+    });
+  }
+  $(`.box-layer-text[index=${indexLayer}] .text-content`).html(content);
+
+  // Thêm sự kiện drag
+  $(".box-layer").draggable({
+    drag: function (event, ui) {
+      let indexLayerDrag = $(this).attr("index");
+      let position = $(this).position();
+      console.log(position.top, position.left);
+
+      $(`.detail[index=${indexLayerDrag}] .input-text-top`).val(position.top);
+
+      $(`.detail[index=${indexLayerDrag}] .input-text-left`).val(position.left);
+    },
+  });
+
+  // Khi sửa nội dung layer
+}
 
 // Tạo layer text ngắn
 $("#addText").click(function (event) {
@@ -94,7 +205,10 @@ $("#addLongText").click(function (event) {
 
 // Xóa layer
 $(".layers").on("click", ".delete-layer", function () {
+  let indexLayer = $(this).closest(".layer").attr("index");
   $(this).closest(".layer").remove();
+  $(`.box-layer-text[index=${indexLayer}]`).remove();
+  $(`.detail[index=${indexLayer}]`).remove();
 });
 
 // Khi click và layer
@@ -113,43 +227,76 @@ $(".layers").on("click", ".layer", function () {
   );
 });
 
-// Xử lý khi thay đổi chi tiết layer
-for (let i = 1; i <= getIndex(); i++) {
-  // Thực hiện các công việc cần thiết trong vòng lặp
-}
+$(document).ready(function () {
+  $(".input-text-font").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+      "font-family",
+      $(this).val()
+    );
+  });
 
-$("#fontSelect").change(function () {
-  var font = $(this).val();
-  $("#textInput").css("font-family", font);
-});
+  $(".input-text-color").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+      "color",
+      $(this).val()
+    );
+  });
 
-$("#colorPicker").change(function () {
-  var color = $(this).val();
-  $("#textInput").css("color", color);
-});
+  $(".input-text-size").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+      "font-size",
+      `${$(this).val()}px`
+    );
+  });
 
-$("#fontSizeSelect").change(function () {
-  var size = $(this).val() + "px";
-  $("#textInput").css("font-size", size);
-});
+  $(".input-text-align").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+      "text-align",
+      $(this).val()
+    );
+  });
 
-$("#boldBtn").click(function () {
-  $("#textInput").toggleClass("bold");
-});
+  $(".input-text-vertical").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+      "vertical-align",
+      $(this).val()
+    );
+  });
 
-$("#italicBtn").click(function () {
-  $("#textInput").toggleClass("italic");
-});
+  $(".input-text-type").change(function () {
+    let indexLayer = $(this).attr("index");
+    if ($(this).val() == "bold") {
+      $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+        "font-weight",
+        $(this).val()
+      );
+    } else {
+      $(`.box-layer-text[index=${indexLayer}] .text-content`).css({
+        "font-style": $(this).val(),
+        "font-weight": "normal",
+      });
+    }
+  });
 
-$("#resizable").draggable({
-  drag: function (event, ui) {
-    // Xử lý khi đang kéo thả ở đây
-    console.log("Đang kéo thả...");
-    $("#resizable").css({
-      right: "auto",
-      bottom: "auto",
-    });
-  },
+  $(".input-text-width").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}]`).css("width", $(this).val());
+  });
+
+  $(".input-text-height").change(function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}]`).css("height", $(this).val());
+  });
+
+  $(".text").on("input", function () {
+    let indexLayer = $(this).attr("index");
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).text($(this).val());
+  });
 });
 
 // Tạo dữ liệu ban đầu
