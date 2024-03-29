@@ -17,7 +17,7 @@
           Lời chúc
         </a>
         <div class="dropdown-menu">
-          <% Event.where(status: 1).order(:order).each do |event| %>
+          <% @events.each do |event| %>
             <a class="dropdown-item" href="<%= list_wishes_events_path(id: event.id) %>"><%= event.content %></a>
           <% end %>
         </div>
@@ -27,7 +27,7 @@
           Quản trị lời chúc, sự kiện
         </a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="<%= users_path %>">Danh sách người dùng</a>
+          <%# <a class="dropdown-item" href="<%= users_path %>">Danh sách người dùng</a> %>
           <a class="dropdown-item" href="<%= events_path %>">Danh sách sự kiện</a>
           <a class="dropdown-item" href="<%= categories_path %>">Đề mục của sự kiện</a>
           <a class="dropdown-item" href="<%= wishes_path %>">Danh sách mời chúc</a>
@@ -45,5 +45,22 @@
         </div>
       </li>
     </ul>
+  </div>
+
+  <div class="">
+    <% if user_signed_in? %>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            <%= current_user.email %>
+          </a>
+          <div class="dropdown-menu">
+            <%= button_to "Đăng xuất", destroy_user_session_path, method: :delete  %>
+          </div>
+        </li>
+      </ul>
+    <% else %>
+      <%= link_to "Đăng nhập", new_user_session_path  %>
+    <% end%>
   </div>
 </nav>

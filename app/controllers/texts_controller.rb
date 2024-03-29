@@ -1,5 +1,5 @@
 class TextsController < ApplicationController
-  before_action :set_text, only: %i[ show edit update destroy ]
+  before_action :set_text, only: %i[show edit update destroy]
 
   # GET /texts or /texts.json
   def index
@@ -7,8 +7,7 @@ class TextsController < ApplicationController
   end
 
   # GET /texts/1 or /texts/1.json
-  def show
-  end
+  def show; end
 
   # GET /texts/new
   def new
@@ -16,8 +15,7 @@ class TextsController < ApplicationController
   end
 
   # GET /texts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /texts or /texts.json
   def create
@@ -25,7 +23,7 @@ class TextsController < ApplicationController
 
     respond_to do |format|
       if @text.save
-        format.html { redirect_to text_url(@text), notice: "Text was successfully created." }
+        format.html { redirect_to text_url(@text), notice: 'Text was successfully created.' }
         format.json { render :show, status: :created, location: @text }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +36,7 @@ class TextsController < ApplicationController
   def update
     respond_to do |format|
       if @text.update(text_params)
-        format.html { redirect_to text_url(@text), notice: "Text was successfully updated." }
+        format.html { redirect_to text_url(@text), notice: 'Text was successfully updated.' }
         format.json { render :show, status: :ok, location: @text }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,19 +50,21 @@ class TextsController < ApplicationController
     @text.destroy
 
     respond_to do |format|
-      format.html { redirect_to texts_url, notice: "Text was successfully destroyed." }
+      format.html { redirect_to texts_url, notice: 'Text was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_text
-      @text = Text.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def text_params
-      params.require(:text).permit(:content, :is_long, :font, :color, :size, :text_align, :vertical, :text_type, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_text
+    @text = Text.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def text_params
+    params.require(:text).permit(:content, :is_long, :font, :color, :size, :text_align, :vertical, :text_type,
+                                 :status)
+  end
 end
