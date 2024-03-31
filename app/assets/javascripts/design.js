@@ -13,6 +13,7 @@ function getIndex() {
 // Tạo giá trị từ controller
 const wish_title = $("#wish_title").val();
 const wish_content = $("#wish_content").val();
+const card_flg = $("#card_flg").val();
 
 // Khởi tạo giá trị index đang chọn
 const NOT_SELECT = -1;
@@ -51,7 +52,39 @@ function nameDetailLayer(layerAttribute, indexLayer) {
 
 img.attr("src", $("#imageInput").attr("src"));
 
-function addLayerText(type, content = "") {
+function isObjectEmpty(objectName) {
+  return (
+    objectName &&
+    Object.keys(objectName).length === 0 &&
+    objectName.constructor === Object
+  );
+}
+
+function addLayerText(type, content = "", layerDetail = {}) {
+  // Giá giá trị mặc định
+  if (isObjectEmpty(layerDetail)) {
+    layerDetail = {
+      color: "#000000",
+      content: content,
+      font: "Arial",
+      size: 12,
+      text_align: "Left",
+      text_type: "normal",
+      vertical: "top",
+    };
+
+    if (type == "text") {
+      layerDetail["width"] = 600;
+      layerDetail["height"] = 50;
+      layerDetail["top"] = 70;
+      layerDetail["left"] = 75;
+    } else if (type == "textLong") {
+      layerDetail["width"] = 600;
+      layerDetail["height"] = 200;
+      layerDetail["top"] = 130;
+      layerDetail["left"] = 75;
+    }
+  }
   // Tạo layer ở phần các lớp
   let indexLayer = AddAndGetIndex();
   let $newLayer = $(`.layer-template-${type}`)
@@ -84,71 +117,65 @@ function addLayerText(type, content = "") {
     .attr("index", indexLayer);
   $(".row-board").append($newDetailLayer);
 
+  // Font
   $(`.detail[index=${indexLayer}] .input-text-font`)
     .attr("name", nameDetailLayer("font", indexLayer))
-    .attr("index", indexLayer);
+    .attr("index", indexLayer)
+    .val(layerDetail["font"]);
 
+  // Màu sắc
   $(`.detail[index=${indexLayer}] .input-text-color`)
     .attr("name", nameDetailLayer("color", indexLayer))
-    .attr("index", indexLayer);
+    .attr("index", indexLayer)
+    .val(layerDetail["color"]);
 
+  // Kích thước chữ
   $(`.detail[index=${indexLayer}] .input-text-size`)
     .attr("name", nameDetailLayer("size", indexLayer))
-    .attr("index", indexLayer);
+    .attr("index", indexLayer)
+    .val(layerDetail["size"]);
 
+  // Căn ngang
   $(`.detail[index=${indexLayer}] .input-text-align`)
     .attr("name", nameDetailLayer("text_align", indexLayer))
-    .attr("index", indexLayer);
+    .attr("index", indexLayer)
+    .val(layerDetail["text_align"]);
 
+  // Căn dọc
   $(`.detail[index=${indexLayer}] .input-text-vertical`)
     .attr("name", nameDetailLayer("vertical", indexLayer))
-    .attr("index", indexLayer);
+    .attr("index", indexLayer)
+    .val(layerDetail["vertical"]);
 
+  // Loại chữ
   $(`.detail[index=${indexLayer}] .input-text-type`)
     .attr("name", nameDetailLayer("text_type", indexLayer))
-    .attr("index", indexLayer);
+    .attr("index", indexLayer)
+    .val(layerDetail["text_type"]);
 
-  if (type == "text") {
-    $(`.detail[index=${indexLayer}] .input-text-width`)
-      .attr("name", nameDetailLayer("width", indexLayer))
-      .attr("index", indexLayer)
-      .val(defaultWidthText);
+  // Chiều rộng
+  $(`.detail[index=${indexLayer}] .input-text-width`)
+    .attr("name", nameDetailLayer("width", indexLayer))
+    .attr("index", indexLayer)
+    .val(layerDetail["width"]);
 
-    $(`.detail[index=${indexLayer}] .input-text-height`)
-      .attr("name", nameDetailLayer("height", indexLayer))
-      .attr("index", indexLayer)
-      .val(defaultHeightText);
+  // Chiều dài
+  $(`.detail[index=${indexLayer}] .input-text-height`)
+    .attr("name", nameDetailLayer("height", indexLayer))
+    .attr("index", indexLayer)
+    .val(layerDetail["height"]);
 
-    $(`.detail[index=${indexLayer}] .input-text-top`)
-      .attr("name", nameDetailLayer("top", indexLayer))
-      .attr("index", indexLayer)
-      .val(topText);
+  // Top
+  $(`.detail[index=${indexLayer}] .input-text-top`)
+    .attr("name", nameDetailLayer("top", indexLayer))
+    .attr("index", indexLayer)
+    .val(layerDetail["top"]);
 
-    $(`.detail[index=${indexLayer}] .input-text-left`)
-      .attr("name", nameDetailLayer("left", indexLayer))
-      .attr("index", indexLayer)
-      .val(leftText);
-  } else if (type == "textLong") {
-    $(`.detail[index=${indexLayer}] .input-text-width`)
-      .attr("name", nameDetailLayer("width", indexLayer))
-      .attr("index", indexLayer)
-      .val(defaultWidthTextLong);
-
-    $(`.detail[index=${indexLayer}] .input-text-height`)
-      .attr("name", nameDetailLayer("height", indexLayer))
-      .attr("index", indexLayer)
-      .val(defaultHeightTextLong);
-
-    $(`.detail[index=${indexLayer}] .input-text-top`)
-      .attr("name", nameDetailLayer("top", indexLayer))
-      .attr("index", indexLayer)
-      .val(topTextLong);
-
-    $(`.detail[index=${indexLayer}] .input-text-left`)
-      .attr("name", nameDetailLayer("left", indexLayer))
-      .attr("index", indexLayer)
-      .val(leftTextLong);
-  }
+  // Left
+  $(`.detail[index=${indexLayer}] .input-text-left`)
+    .attr("name", nameDetailLayer("left", indexLayer))
+    .attr("index", indexLayer)
+    .val(layerDetail["left"]);
 
   // Tạo box text
   let $newBoxLayerText = $(`.box-layer-text-template`)
@@ -157,22 +184,31 @@ function addLayerText(type, content = "") {
     .removeAttr("style")
     .attr("index", indexLayer);
   $(".canvas-board").append($newBoxLayerText);
-  // Gán giá trị default
-  if (type == "text") {
-    $(`.box-layer-text[index=${indexLayer}]`).css({
-      width: defaultWidthText,
-      height: defaultHeightText,
-      top: topText,
-      left: leftText,
-    });
-  } else if (type == "textLong") {
-    $(`.box-layer-text[index=${indexLayer}]`).css({
-      width: defaultWidthTextLong,
-      height: defaultHeightTextLong,
-      top: topTextLong,
-      left: leftTextLong,
+  // Gán vị trí
+  $(`.box-layer-text[index=${indexLayer}]`).css({
+    "font-family": layerDetail["font"],
+    color: layerDetail["color"],
+    "font-size": layerDetail["size"],
+    "text-align": layerDetail["text_align"],
+    "vertical-align": layerDetail["vertical"],
+    width: layerDetail["width"],
+    height: layerDetail["height"],
+    top: layerDetail["top"],
+    left: layerDetail["left"],
+  });
+
+  if (layerDetail["text_type"] == "bold") {
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
+      "font-weight",
+      layerDetail["text_type"]
+    );
+  } else {
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css({
+      "font-style": layerDetail["text_type"],
+      "font-weight": "normal",
     });
   }
+
   $(`.box-layer-text[index=${indexLayer}] .text-content`).html(content);
 
   // Thêm sự kiện drag
@@ -299,6 +335,19 @@ $(document).ready(function () {
   });
 });
 
-// Tạo dữ liệu ban đầu
-addLayerText("text", wish_title);
-addLayerText("textLong", wish_content);
+if (card_flg == 1) {
+  layers.forEach(function (layer) {
+    switch (layer.layer_type) {
+      case "Text":
+        let layerDetail = layer["layer_detail"];
+        let type = layerDetail["is_long"] ? "textLong" : "text";
+        console.log(layerDetail);
+        addLayerText(type, layerDetail["content"], layerDetail);
+        break;
+    }
+  });
+} else {
+  // Tạo dữ liệu ban đầu
+  addLayerText("text", wish_title);
+  addLayerText("textLong", wish_content);
+}

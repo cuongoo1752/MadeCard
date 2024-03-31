@@ -1,0 +1,37 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Công khai</th>
+      <th scope="col">Tên</th>
+      <th scope="col">Chỉnh sửa</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @cards.each do |card| %>
+        <% 
+          layers = LayersOnCard.where(card_id: card.id, status: 1)
+          rowspan = (layers.size > 1 ? layers.size : 1)
+          email_user = User.find_by(id: card.user_id).email
+        %>
+
+        <tr>
+          <th scope="row"><%= card.id %></th>
+          <td><%= card.is_public ? "Công khai" : "Không công khai" %></td>
+          <td><%= card.name %></td>
+          <td>
+            <%= link_to 'Tạo bảo sao', design_cards_path(card_id: card.id) %>
+            <% if card.status == 1 %>
+            / <%= button_to 'Xóa', card, method: :delete, class: "btn btn-link btn-sm btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end%>
+  </tbody>
+</table>
+
+<%= paginate @cards %>
+
+<br>
+
+<%= link_to 'New Card', new_card_path %>

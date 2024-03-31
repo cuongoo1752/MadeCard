@@ -4,16 +4,31 @@ class CardsController < ApplicationController
 
   # GET /cards or /cards.json
   def index
-    @cards = Card.all
+    @cards = if params[:role] == role_admin && is_current_admin?
+               Card.order(created_at: :desc).page(params[:page])
+             else
+               Card.where(user_id: current_user.id, status: 1).order(created_at: :desc).page(params[:page])
+             end
   end
 
   def design
     @layers_on_cards = []
-    return unless params[:wish_id].present?
+    if params[:wish_id].present?
+      wish = Wish.where(id: params[:wish_id]).first
+      @title = Category.find_by(id: wish.category_id)&.content
+      @content = wish&.content
+    elsif params[:card_id].present?
+      @card = Card.find_by(id: params[:card_id], status: 1)
+      return if @card.blank?
 
-    wish = Wish.where(id: params[:wish_id]).first
-    @title = Category.find_by(id: wish.category_id)&.content
-    @content = wish&.content
+      @layers = []
+      LayersOnCard.where(card_id: @card.id, status: 1).order(:order).each do |layer_on_card|
+        @layers << {
+          layer_type: layer_on_card.layer_type,
+          layer_detail: layer_on_card.layer
+        }
+      end
+    end
   end
 
   # GET /cards/1 or /cards/1.json
@@ -76,14 +91,10 @@ class CardsController < ApplicationController
       LayersOnCard.create! params_layer_on_card
     end
 
-    respond_to do |format|
-      if @card
-        format.html { redirect_to card_url(@card), notice: 'Card was successfully created.' }
-        format.json { render :show, status: :created, location: @card }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @card.errors, status: :unprocessable_entity }
-      end
+    if @card
+      redirect_to card_url(@card), notice: 'Đã tạo thiệp thành công'
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -93,7 +104,7 @@ class CardsController < ApplicationController
 
     respond_to do |format|
       if @card.save
-        format.html { redirect_to card_url(@card), notice: 'Card was successfully created.' }
+        format.html { redirect_to card_url(@card), notice: 'Tạo thiệp thành công!' }
         format.json { render :show, status: :created, location: @card }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -106,7 +117,7 @@ class CardsController < ApplicationController
   def update
     respond_to do |format|
       if @card.update(card_params)
-        format.html { redirect_to card_url(@card), notice: 'Card was successfully updated.' }
+        format.html { redirect_to card_url(@card), notice: 'Cập nhận thiệp thành công!' }
         format.json { render :show, status: :ok, location: @card }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -117,10 +128,10 @@ class CardsController < ApplicationController
 
   # DELETE /cards/1 or /cards/1.json
   def destroy
-    @card.destroy
+    @card.update(delete_params)
 
     respond_to do |format|
-      format.html { redirect_to cards_url, notice: 'Card was successfully destroyed.' }
+      format.html { redirect_to cards_url, notice: 'Xóa thiệp thành công!' }
       format.json { head :no_content }
     end
   end

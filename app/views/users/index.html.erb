@@ -1,34 +1,32 @@
-<h1>Users</h1>
+<br>
+<h2>Danh sách người dùng</h2>
+<br>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th>Username</th>
-      <th>Password</th>
-      <th>Role</th>
-      <th>Status</th>
-      <th>Order</th>
-      <th>Integer</th>
-      <th colspan="3"></th>
+      <th scope="col">Id</th>
+      <th scope="col">Địa chỉ email</th>
+      <th scope="col">Quyền</th>
+      <th scope="col">Ngày tạo</th>
+      <th scope="col">Trạng thái</th>
+      <th scope="col">Chỉnh sửa</th>
     </tr>
   </thead>
-
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.username %></td>
-        <td><%= user.password %></td>
-        <td><%= user.role %></td>
-        <td><%= user.status %></td>
-        <td><%= user.order %></td>
-        <td><%= user.integer %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th scope="row"><%= user.id %></th>
+        <td><%= user.email %></td>
+        <td><%= user.created_at&.strftime('%I:%M%p %d/%m/%Y') %></td>
+        <td><%= user.role == role_admin ? "Người quản trị" : "Người dùng" %></td>
+        <td><%= user.status == 1 ? "Đang hoạt động" : "Đã xóa" %></td>
+        <td><%= link_to 'Chi tiét', user %> / <%= link_to 'Sửa', edit_user_path(user) %> / <%= link_to 'Xóa', user, method: :delete, data: { confirm: 'Bạn có chắc không?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+<%= paginate @users %>
 
 <br>
 

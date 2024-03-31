@@ -115,6 +115,11 @@
 
 <%= hidden_field_tag 'wish_title', @title.to_s %>
 <%= hidden_field_tag 'wish_content', @content.to_s %>
+<%= hidden_field_tag('card_flg', '1') if @card.present? %>
+
+<script>
+  const layers = <%= @layers.to_json.html_safe %>
+</script>
 
 <%= javascript_include_tag 'jquery' %>
 <%= javascript_include_tag 'jquery-ui' %>

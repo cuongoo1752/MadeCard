@@ -1,0 +1,34 @@
+<% if layers_on_card.present? %>
+  <td><%= layers_on_card.id %></td>
+  <% case layers_on_card.layer_type %>
+  <% when "Text" %>
+    <% text = layers_on_card.layer %>
+    <td><%= text.is_long ? "Lời chúc dài" : "Lời chúc" %></td>
+    <td><%= text.content %></td>
+    <td>
+      is_long: <%= text.is_long %>
+        / font: <%= text.font %>
+        / color: <%= text.color %>
+        / size: <%= text.size %>
+        / text_align: <%= text.text_align %>
+        / vertical: <%= text.vertical %>
+        / text_type: <%= text.text_type %>
+        / status: <%= text.status %>
+        / width: <%= text.width %>
+        / height: <%= text.height %>
+        / top: <%= text.top %>
+        / left: <%= text.left %>
+    </td>
+  <% else %>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+  <% end %>
+  <td><%= link_to 'Chi tiết', layers_on_card %> / <%= link_to 'Sửa', edit_layers_on_card_path(layers_on_card) %> / <%= link_to 'Xóa', layers_on_card, method: :delete, data: { confirm: 'Bạn có chắc không?' } %></td>
+<% else %>
+  <td>-</td>
+  <td>-</td>
+  <td>-</td>
+  <td>-</td>
+  <td>-</td>
+<% end %>

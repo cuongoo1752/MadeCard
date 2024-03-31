@@ -25,6 +25,6 @@ module ApplicationHelper
   end
 
   def get_user_id_request
-    User.find_by(status: 999).id
+    current_user&.id ||= User.find_by(status: 999).id
   end
 end
