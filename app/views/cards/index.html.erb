@@ -1,61 +1,10 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Danh sách thiệp</h1>
-
-<% @cards.each do |card| %>
-<div class="jumbotron">
-  <p class="lead">
-    <%= "card_id: #{card.id}" %>
-    <%= "Có public, " if card.is_public %>
-    <%= "status: #{card.status}, " %>
-    <%= "user_id: #{card.user_id}, Người tạo: #{User.find_by(id: card.user_id).username}, " %>
-    <%= "order: #{card.order}, " %>
-    <%= link_to 'Show', card %>
-    <%= link_to 'Edit', edit_card_path(card) %>
-    <%= link_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %>
-  </p>
-  
-  <hr class="my-4">
-  <% LayersOnCard.where(card_id: card.id, status: 1).each do |layers_on_card| %>
-    <p>
-      name: <%= layers_on_card.name %>
-      layer_id: <%= layers_on_card.layer_id %>
-      layer_type: <%= layers_on_card.layer_type %>
-      status: <%= layers_on_card.status %>
-      order: <%= layers_on_card.order %>
-      user_id: <%= layers_on_card.user_id %>
-      <%= link_to 'Show', layers_on_card %>
-      <%= link_to 'Edit', edit_layers_on_card_path(layers_on_card) %>
-      <%= link_to 'Destroy', layers_on_card, method: :delete, data: { confirm: 'Are you sure?' } %>
-    </p>
-
-    <p>
-      =====>
-      <% case layers_on_card.layer_type %>
-      <% when "Text" %>
-        <% text = layers_on_card.layer %>
-        content: <%= text.content %>
-        is_long: <%= text.is_long %>
-        font: <%= text.font %>
-        color: <%= text.color %>
-        size: <%= text.size %>
-        text_align: <%= text.text_align %>
-        vertical: <%= text.vertical %>
-        text_type: <%= text.text_type %>
-        status: <%= text.status %>
-        width: <%= text.width %>
-        height: <%= text.height %>
-        top: <%= text.top %>
-        left: <%= text.left %>
-        <%= link_to 'Show', text %>
-        <%= link_to 'Edit', edit_text_path(text) %>
-        <%= link_to 'Destroy', text, method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </p>
-  <% end %>
-</div>
-<% end %>
-
+<br>
+<h2>Danh sách thiệp</h2>
 <br>
 
-<%= link_to 'New Card', new_card_path %>
+<% if params[:role] == role_admin && is_current_admin? %>
+  <%= render "list_card_admin.html.erb" %>
+<% else %>
+  <%= render "list_card_user.html.erb" %>
+<% end %>
+

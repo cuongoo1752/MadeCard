@@ -14,9 +14,16 @@
   </head>
 
   <body>
-  <%= render "./layouts/navbar.html.erb" %>
-
-  <%= yield %>
+    <%= render "./layouts/navbar.html.erb" %>
+    <% if notice.present? || alert.present? %>
+      <div class="container-fluid">
+        <div class="alert alert-success" role="alert">
+          <%= notice %>
+        </div>
+        <p class="alert"><%= alert %></p>
+      </div>
+    <% end %>
+    <%= yield %>
   </body>
   <%= javascript_include_tag 'jquery_slim', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'bootstrap_bundle', media: 'all', 'data-turbolinks-track': 'reload' %>

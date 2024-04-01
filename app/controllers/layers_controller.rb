@@ -1,5 +1,5 @@
 class LayersController < ApplicationController
-  before_action :set_layer, only: %i[ show edit update destroy ]
+  before_action :set_layer, only: %i[show edit update destroy]
 
   # GET /layers or /layers.json
   def index
@@ -8,8 +8,7 @@ class LayersController < ApplicationController
   end
 
   # GET /layers/1 or /layers/1.json
-  def show
-  end
+  def show; end
 
   # GET /layers/new
   def new
@@ -17,8 +16,7 @@ class LayersController < ApplicationController
   end
 
   # GET /layers/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /layers or /layers.json
   def create
@@ -26,7 +24,7 @@ class LayersController < ApplicationController
 
     respond_to do |format|
       if @layer.save
-        format.html { redirect_to layer_url(@layer), notice: "Layer was successfully created." }
+        format.html { redirect_to layer_url(@layer), notice: 'Layer was successfully created.' }
         format.json { render :show, status: :created, location: @layer }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +37,7 @@ class LayersController < ApplicationController
   def update
     respond_to do |format|
       if @layer.update(layer_params)
-        format.html { redirect_to layer_url(@layer), notice: "Layer was successfully updated." }
+        format.html { redirect_to layer_url(@layer), notice: 'Layer was successfully updated.' }
         format.json { render :show, status: :ok, location: @layer }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,19 +51,20 @@ class LayersController < ApplicationController
     @layer.destroy
 
     respond_to do |format|
-      format.html { redirect_to layers_url, notice: "Layer was successfully destroyed." }
+      format.html { redirect_to layers_url, notice: 'Layer was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_layer
-      @layer = Layer.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def layer_params
-      params.require(:layer).permit(:name, :order)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_layer
+    @layer = Layer.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def layer_params
+    params.require(:layer).permit(:name, :order)
+  end
 end

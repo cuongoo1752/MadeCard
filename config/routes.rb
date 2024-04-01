@@ -15,5 +15,7 @@ Rails.application.routes.draw do
       post 'create_card_and_layers', to: 'cards#create_card_and_layers'
     end
   end
+  devise_for :users
   resources :users
+  root 'cards#design'
 end

@@ -31,3 +31,19 @@
 
 en:
   hello: "Hello world"
+  views:
+    pagination:
+      first: "« TRANG ĐẦU"
+      last: "TRANG CUỐI »"
+      previous: "‹ TRƯỚC"
+      next: "SAU ›"
+      truncate: "…"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "Không tìm thấy %{entry_name}"
+          one: "Đang hiển thị <b>1</b> %{entry_name}"
+          other: "Đang hiển thị <b>tất cả %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "Đang hiển thị tổng cộng %{entry_name} <b>%{first} - %{last}</b> trong tổng số <b>%{total}</b>"

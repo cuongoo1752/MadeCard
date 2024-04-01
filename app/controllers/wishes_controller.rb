@@ -1,5 +1,5 @@
 class WishesController < ApplicationController
-  before_action :set_wish, only: %i[ show edit update destroy ]
+  before_action :set_wish, only: %i[show edit update destroy]
 
   # GET /wishes or /wishes.json
   def index
@@ -7,8 +7,7 @@ class WishesController < ApplicationController
   end
 
   # GET /wishes/1 or /wishes/1.json
-  def show
-  end
+  def show; end
 
   # GET /wishes/new
   def new
@@ -16,8 +15,7 @@ class WishesController < ApplicationController
   end
 
   # GET /wishes/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /wishes or /wishes.json
   def create
@@ -25,7 +23,7 @@ class WishesController < ApplicationController
 
     respond_to do |format|
       if @wish.save
-        format.html { redirect_to wish_url(@wish), notice: "Wish was successfully created." }
+        format.html { redirect_to wish_url(@wish), notice: 'Wish was successfully created.' }
         format.json { render :show, status: :created, location: @wish }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +36,7 @@ class WishesController < ApplicationController
   def update
     respond_to do |format|
       if @wish.update(wish_params)
-        format.html { redirect_to wish_url(@wish), notice: "Wish was successfully updated." }
+        format.html { redirect_to wish_url(@wish), notice: 'Wish was successfully updated.' }
         format.json { render :show, status: :ok, location: @wish }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,19 +50,20 @@ class WishesController < ApplicationController
     @wish.destroy
 
     respond_to do |format|
-      format.html { redirect_to wishes_url, notice: "Wish was successfully destroyed." }
+      format.html { redirect_to wishes_url, notice: 'Wish was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_wish
-      @wish = Wish.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def wish_params
-      params.require(:wish).permit(:category_id, :content, :status, :user_id, :order)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_wish
+    @wish = Wish.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def wish_params
+    params.require(:wish).permit(:category_id, :content, :status, :user_id, :order)
+  end
 end
