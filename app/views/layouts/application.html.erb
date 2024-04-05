@@ -17,10 +17,15 @@
     <%= render "./layouts/navbar.html.erb" %>
     <% if notice.present? || alert.present? %>
       <div class="container-fluid">
-        <div class="alert alert-success" role="alert">
-          <%= notice %>
-        </div>
-        <p class="alert"><%= alert %></p>
+        <% if notice.present? %>
+          <div class="alert alert-success" role="alert">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <% if alert.present? %>
+          <p class="alert"><%= alert %></p>
+        <% end %>
       </div>
     <% end %>
     <%= yield %>

@@ -2,3 +2,16 @@ a:hover {
   color: #fff;
   background-color: #dddddd;
 }
+
+.page-item-custom.active .page-link-custom{
+  background-color: #5a6268;
+  border-color: #5a6268;
+}
+
+.page-link-custom{
+  color: #5a6268;
+}
+
+.page-link-custom:hover{
+  color: #5a6268;
+}

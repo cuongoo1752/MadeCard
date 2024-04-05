@@ -16,3 +16,4 @@
 //= require jquery
 //= require custom
 //= require design
+//= require events

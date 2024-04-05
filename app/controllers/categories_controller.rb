@@ -3,7 +3,11 @@ class CategoriesController < ApplicationController
 
   # GET /categories or /categories.json
   def index
-    @categories = Category.all
+    if params[:event_id].present?
+      @categories = Category.where(event_id: params[:event_id])
+    else
+      @categories = Category.all
+    end
   end
 
   # GET /categories/1 or /categories/1.json
