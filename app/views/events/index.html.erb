@@ -38,7 +38,7 @@
             <%= event.updated_at&.strftime('%I:%M%p %d/%m/%Y') %>
           </td>
           <td>
-            <%= link_to "Chi tiết đề mục", categories_path(event_id: event.id), class: "btn btn-light" %>
+            <%= link_to name_button_category(event), categories_path(event_id: event.id), class: "btn btn-light" %>
           </td>
         </tr>
       <% end%>

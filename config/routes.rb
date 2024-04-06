@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
-  resources :wishes
-  resources :categories
-  resources :events do
+  resources :wishes, only: [:index] do
+    collection do
+      post "update_all", to: 'wishes#update_all'
+    end
+  end
+  resources :categories, only: [:index] do
+    collection do
+      post "update_all", to: 'categories#update_all'
+    end
+  end
+  resources :events, only: [:index] do
     collection do
       get 'list_wishes', to: 'events#list_wishes'
       post "update_all", to: 'events#update_all'
@@ -10,7 +18,7 @@ Rails.application.routes.draw do
   resources :texts
   resources :images
   resources :layers_on_cards
-  resources :cards, only: [:index] do
+  resources :cards do
     collection do
       get 'design', to: 'cards#design'
       post 'create_card_and_layers', to: 'cards#create_card_and_layers'

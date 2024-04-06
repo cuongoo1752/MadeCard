@@ -14,6 +14,9 @@
 //= require turbolinks
 //= require_tree .
 //= require jquery
+//= require html2canvas
 //= require custom
 //= require design
 //= require events
+//= require categories
+//= require wishes

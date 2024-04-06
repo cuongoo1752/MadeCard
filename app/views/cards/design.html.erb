@@ -1,4 +1,8 @@
 <%= stylesheet_link_tag 'design', media: 'all', 'data-turbolinks-track': 'reload' %>
+<style type="text/css">
+  <%= render "design.css.erb" %>
+</style>
+
 <%= form_tag(create_card_and_layers_cards_path, class: "box") do %>
   <div class="container">
     <%# Phần hiển thị các lớp %>
@@ -31,7 +35,7 @@
     </section>
     
     <%# Phần hiển thị ảnh %>
-    <section class="canvas-board">
+    <div class="canvas-board">
       <div class="box-layer box-layer-text box-layer-text-template" style="display: none;">
         <p class="text-content"></p>
         <div class="resizer top-left"></div>
@@ -39,7 +43,7 @@
         <div class="resizer bottom-left"></div>
         <div class="resizer bottom-right"></div>
       </div>
-    </section>
+    </div>
 
     <%# Phần hiển thị các thuộc tính %>
     <section class="detail-board">
@@ -52,6 +56,9 @@
               <option value="Arial">Arial</option>
               <option value="Times New Roman">Times New Roman</option>
               <option value="verdana">Verdana</option>
+              <option value="Notosans">Notosans</option>
+              <option value="helvetica">Helvetica</option>
+              <option value="GreatVibes">Great Vibes</option>
             </select>
           </li>
           <li class="attribute">
@@ -101,11 +108,12 @@
 
       <div class="row buttons">
         <div class="add-buttons">
-          <button id="addText" class="add-layer add-text-botton">Thêm lớp lời chúc</button>
+          <button id="addText" class="add-layer add-text-botton">Thêm lời chúc</button>
           <div class="space"></div>
-          <button id="addLongText" class="add-layer">Thêm lờp lời chúc dài</button>
+          <button id="addLongText" class="add-layer">Thêm lời chúc dài</button>
         </div>
         <button id="addImageAndTextBtn" class="add-layer">Lưu thiết kế</button>
+        <button id="downloadImage" class="add-layer">Tải về ảnh</button>
       </div>
     </section>
   </div>
@@ -123,4 +131,5 @@
 
 <%= javascript_include_tag 'jquery' %>
 <%= javascript_include_tag 'jquery-ui' %>
+<%= javascript_include_tag 'html2canvas' %>
 <%= javascript_include_tag 'design' %>

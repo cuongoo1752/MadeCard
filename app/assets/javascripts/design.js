@@ -227,6 +227,27 @@ function addLayerText(type, content = "", layerDetail = {}) {
   // Khi sửa nội dung layer
 }
 
+// Tải ảnh về
+$("#downloadImage").click(function (event) {
+  event.preventDefault();
+  html2canvas($(".canvas-board")[0]).then(function (canvas) {
+    var link = document.createElement("a");
+    link.download = "image.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+});
+
+$(".canvas-board")
+  .on("mouseenter", function () {
+    $(".box-layer").css("border", "1px solid #4a98f7");
+    $(".resizer").css("background-color", "#4a98f7");
+  })
+  .on("mouseleave", function () {
+    $(".box-layer").css("border", "1px solid transparent");
+    $(".resizer").css("background-color", "transparent");
+  });
+
 // Tạo layer text ngắn
 $("#addText").click(function (event) {
   event.preventDefault();

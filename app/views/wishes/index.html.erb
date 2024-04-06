@@ -1,33 +1,67 @@
-<h1>Wishes</h1>
+<%= form_tag(update_all_wishes_path) do %>
+  <div class="d-flex justify-content-between p-3">
+    <div class="">
+      <h3>Danh sách lời chúc của đề mục: <%= @category&.content %></h3>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Category</th>
-      <th>Content</th>
-      <th>Status</th>
-      <th>User</th>
-      <th>Order</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <div class="">
+      <button type="button" id="addWish" class="btn btn-light">Tạo lời chúc</button>
+      <input type="submit" name="commit" value="Cập nhật tất cả lời chúc" class="btn btn-light">
+    </div>
+  </div>
 
-  <tbody>
-    <% @wishes.each do |wish| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= wish.category_id %></td>
-        <td><%= wish.content %></td>
-        <td><%= wish.status %></td>
-        <td><%= wish.user_id %></td>
-        <td><%= wish.order %></td>
-        <td><%= link_to 'Show', wish %></td>
-        <td><%= link_to 'Edit', edit_wish_path(wish) %></td>
-        <td><%= link_to 'Destroy', wish, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th scope="col">Tên sự kiện</th>
+        <th scope="col">Trạng thái</th>
+        <th scope="col">Ngưởi cập nhật</th>
+        <th scope="col">Ngày cập nhật</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody class="wishes">
+      <% @wishes.each do |wish| %>
+        <tr class="wish">
+          <input type="hidden" name="<%= "type@#{wish.id}" %>"value="update" />
+          <th scope="row">
+            <textarea name="<%= "content@#{wish.id}" %>" class="form-control"><%= wish.content %></textarea>
+          </th>
+          <td>
+            <select name="<%= "status@#{wish.id}" %>" class="form-control">
+              <option value="1" <%= "selected" if wish.status == 1 %> >Đang hiển thị</option>
+              <option value="9" <%= "selected" if wish.status == 9 %>>Xóa</option>
+            </select>
+          </td>
+          <td><%= get_email_user(wish.user_id) %></td>
+          <td>
+            <%= wish.updated_at&.strftime('%I:%M%p %d/%m/%Y') %>
+          </td>
+        </tr>
+      <% end%>
 
-<br>
+      <tr class="wish wish-template" style="display: none;">
+        <input type="hidden" class="form-control" name="type" value="create" />
+        <th scope="row">
+          <textarea name="content" class="form-control" placeholder="Điền lời chúc"></textarea>
+        </th>
+        <td>
+          <select name="status" class="form-control">
+            <option value="1" selected>Đang hiển thị</option>
+            <option value="9" >Xóa</option>
+          </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <input type="hidden" name="category_id" value="<%= @category&.id %>" />
+<% end %>
 
-<%= link_to 'New Wish', new_wish_path %>
+<input type="hidden" id="max-id" name="max-id" value="<%= @max_id %>" />
+<%= link_to 'Trở về danh sách đề mục', categories_path(event_id: @category.event_id), class: "btn btn-light m-2" %>
+
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery-ui' %>
+<%= javascript_include_tag 'wishes' %>

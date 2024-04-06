@@ -1,33 +1,73 @@
-<h1>Categories</h1>
+<%= form_tag(update_all_categories_path) do %>
+  <div class="d-flex justify-content-between p-3">
+    <div class="">
+      <h3>Danh sách đề mục của sự kiện: <%= @event&.content %></h3>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Event</th>
-      <th>Content</th>
-      <th>Status</th>
-      <th>User</th>
-      <th>Order</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <div class="">
+      <button type="button" id="addCategory" class="btn btn-light">Tạo đề mục</button>
+      <input type="submit" name="commit" value="Cập nhật tất cả đề mục" class="btn btn-light">
+    </div>
+  </div>
 
-  <tbody>
-    <% @categories.each do |category| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= category.event_id %></td>
-        <td><%= category.content %></td>
-        <td><%= category.status %></td>
-        <td><%= category.user_id %></td>
-        <td><%= category.order %></td>
-        <td><%= link_to 'Show', category %></td>
-        <td><%= link_to 'Edit', edit_category_path(category) %></td>
-        <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th scope="col">Tên sự kiện</th>
+        <th scope="col">Trạng thái</th>
+        <th scope="col">Ngưởi cập nhật</th>
+        <th scope="col">Ngày cập nhật</th>
+        <th scope="col">Chi tiết đề mục</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody class="categories">
+      <% @categories.each do |category| %>
+        <tr class="category">
+          <input type="hidden" name="<%= "type@#{category.id}" %>"value="update" />
+          <th scope="row">
+            <input type="text" name="<%= "content@#{category.id}" %>" class="form-control" value="<%= category.content %>">
+          </th>
+          <td>
+            <select name="<%= "status@#{category.id}" %>" class="form-control">
+              <option value="1" <%= "selected" if category.status == 1 %> >Đang hiển thị</option>
+              <option value="9" <%= "selected" if category.status == 9 %>>Xóa</option>
+            </select>
+          </td>
+          <td><%= get_email_user(category.user_id) %></td>
+          <td>
+            <%= category.updated_at&.strftime('%I:%M%p %d/%m/%Y') %>
+          </td>
+          <td>
+            <%= link_to "Danh sách #{Wish.where(status: 1, category_id: category.id).size} lời chúc", wishes_path(category_id: category.id), class: "btn btn-light" %>
+          </td>
+        </tr>
+      <% end%>
 
-<br>
+      <tr class="category category-template" style="display: none;">
+        <input type="hidden" class="form-control" name="type" value="create" />
+        <th scope="row">
+          <input type="text" name="content" class="form-control" value="" placeholder="Điền tên đề mục">
+        </th>
+        <td>
+          <select name="status" class="form-control">
+            <option value="1" selected>Đang hiển thị</option>
+            <option value="9" >Xóa</option>
+          </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <input type="hidden" name="event_id" value="<%= @event&.id %>" />
+<% end %>
 
-<%= link_to 'New Category', new_category_path %>
+<input type="hidden" id="max-id" name="max-id" value="<%= @max_id %>" />
+<%= link_to 'Trở về danh sách sự kiện', events_path, class: "btn btn-light m-2" %>
+
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery-ui' %>
+<%= javascript_include_tag 'categories' %>
+
+

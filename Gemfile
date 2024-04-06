@@ -31,6 +31,7 @@ gem 'bootstrap-kaminari-views'
 gem 'devise', '~> 4.1'
 gem 'kaminari'
 gem 'rubocop'
+gem 'roman-numerals'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -6,7 +6,6 @@ class EventsController < ApplicationController
   # GET /events or /events.json
   def index
     load_events
-    @event = Event.new
   end
 
   def list_wishes
@@ -73,7 +72,7 @@ class EventsController < ApplicationController
   private
 
   def load_events
-    @events = Event.where(status: 1).order(created_at: :desc)
+    @events = Event.where(status: 1).order(created_at: :asc)
     @max_id = Event.maximum(:id).to_i
   end
 end

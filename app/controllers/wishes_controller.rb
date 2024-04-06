@@ -3,67 +3,80 @@ class WishesController < ApplicationController
 
   # GET /wishes or /wishes.json
   def index
-    @wishes = Wish.all
+    load_wishes
   end
 
-  # GET /wishes/1 or /wishes/1.json
-  def show; end
+  def update_all
+    msg_errors = []
 
-  # GET /wishes/new
-  def new
-    @wish = Wish.new
-  end
+    ActiveRecord::Base.transaction do
+      params.each do |key, value|
+        next if value.blank?
 
-  # GET /wishes/1/edit
-  def edit; end
+        list_key = key.split('@')
 
-  # POST /wishes or /wishes.json
-  def create
-    @wish = Wish.new(wish_params)
+        next if list_key.size != 2 || list_key.first != 'type'
 
-    respond_to do |format|
-      if @wish.save
-        format.html { redirect_to wish_url(@wish), notice: 'Wish was successfully created.' }
-        format.json { render :show, status: :created, location: @wish }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @wish.errors, status: :unprocessable_entity }
+        wish_id = list_key[1]
+        case value
+        when 'update'
+          wish = Wish.find_by(id: wish_id)
+          if wish_id.blank? || wish.blank?
+            msg_errors << 'Lời chúc này đã không còn tồn tại!'
+            next
+          end
+
+          if params[:"content@#{wish_id}"] == wish.content && params[:"status@#{wish_id}"].to_i == wish.status.to_i
+            next
+          end
+
+          wish.update!(
+            category_id: params[:category_id],
+            content: params[:"content@#{wish_id}"].strip,
+            status: params[:"status@#{wish_id}"].to_i,
+            updated_at: Time.zone.now,
+            user_id: current_user.id
+          )
+        when 'create'
+          wish = Wish.find_by(id: wish_id)
+          if wish_id.blank? || wish.present?
+            msg_errors << 'Có lỗi xảy ra!'
+            next
+          end
+
+          next if params[:"content@#{wish_id}"].blank?
+
+          Wish.create!(
+            category_id: params[:category_id],
+            content: params[:"content@#{wish_id}"].strip,
+            status: params[:"status@#{wish_id}"].to_i,
+            created_at: Time.zone.now,
+            user_id: current_user.id
+          )
+        end
       end
     end
-  end
+    load_wishes
 
-  # PATCH/PUT /wishes/1 or /wishes/1.json
-  def update
-    respond_to do |format|
-      if @wish.update(wish_params)
-        format.html { redirect_to wish_url(@wish), notice: 'Wish was successfully updated.' }
-        format.json { render :show, status: :ok, location: @wish }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @wish.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /wishes/1 or /wishes/1.json
-  def destroy
-    @wish.destroy
-
-    respond_to do |format|
-      format.html { redirect_to wishes_url, notice: 'Wish was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to wishes_url(category_id: params[:category_id]), notice: 'Cập nhật lời chúc thành công!'
+  rescue StandardError => e
+    load_wishes
+    flash.alert = e.message + msg_errors.join('<br>')
+    render :index
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_wish
-    @wish = Wish.find(params[:id])
-  end
+  def load_wishes
+    @category = Category.find_by(id: params[:category_id])
+    @max_id = Wish.maximum(:id).to_i
 
-  # Only allow a list of trusted parameters through.
-  def wish_params
-    params.require(:wish).permit(:category_id, :content, :status, :user_id, :order)
+    if params[:category_id].blank? || @category.blank?
+      @wishes = []
+      flash.alert = 'Url không hợp lệ!'
+      return render(:index)
+    end
+
+    @wishes = Wish.where(category_id: params[:category_id], status: 1).order(created_at: :asc)
   end
 end

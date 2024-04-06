@@ -3,71 +3,80 @@ class CategoriesController < ApplicationController
 
   # GET /categories or /categories.json
   def index
-    if params[:event_id].present?
-      @categories = Category.where(event_id: params[:event_id])
-    else
-      @categories = Category.all
-    end
+    load_categories
   end
 
-  # GET /categories/1 or /categories/1.json
-  def show; end
+  def update_all
+    msg_errors = []
 
-  # GET /categories/new
-  def new
-    @category = Category.new
-  end
+    ActiveRecord::Base.transaction do
+      params.each do |key, value|
+        next if value.blank?
 
-  # GET /categories/1/edit
-  def edit; end
+        list_key = key.split('@')
 
-  # POST /categories or /categories.json
-  def create
-    @category = Category.new(category_params)
+        next if list_key.size != 2 || list_key.first != 'type'
 
-    respond_to do |format|
-      if @category.save
-        format.html { redirect_to category_url(@category), notice: 'Category was successfully created.' }
-        format.json { render :show, status: :created, location: @category }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @category.errors, status: :unprocessable_entity }
+        category_id = list_key[1]
+        case value
+        when 'update'
+          category = Category.find_by(id: category_id)
+          if category_id.blank? || category.blank?
+            msg_errors << 'Đề mục này này đã không còn tồn tại!'
+            next
+          end
+
+          if params[:"content@#{category_id}"] == category.content && params[:"status@#{category_id}"].to_i == category.status.to_i
+            next
+          end
+
+          category.update!(
+            event_id: params[:event_id],
+            content: params[:"content@#{category_id}"],
+            status: params[:"status@#{category_id}"].to_i,
+            updated_at: Time.zone.now,
+            user_id: current_user.id
+          )
+        when 'create'
+          category = Category.find_by(id: category_id)
+          if category_id.blank? || category.present?
+            msg_errors << 'Có lỗi xảy ra!'
+            next
+          end
+
+          next if params[:"content@#{category_id}"].blank?
+
+          Category.create!(
+            event_id: params[:event_id],
+            content: params[:"content@#{category_id}"],
+            status: params[:"status@#{category_id}"].to_i,
+            created_at: Time.zone.now,
+            user_id: current_user.id
+          )
+        end
       end
     end
-  end
+    load_categories
 
-  # PATCH/PUT /categories/1 or /categories/1.json
-  def update
-    respond_to do |format|
-      if @category.update(category_params)
-        format.html { redirect_to category_url(@category), notice: 'Category was successfully updated.' }
-        format.json { render :show, status: :ok, location: @category }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @category.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /categories/1 or /categories/1.json
-  def destroy
-    @category.destroy
-
-    respond_to do |format|
-      format.html { redirect_to categories_url, notice: 'Category was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to categories_url(event_id: params[:event_id]), notice: 'Cập nhật sự kiện thành công!'
+  rescue StandardError => e
+    load_categories
+    flash.alert = e.message + msg_errors.join('<br>')
+    render :index
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_category
-    @category = Category.find(params[:id])
-  end
+  def load_categories
+    @event = Event.find_by(id: params[:event_id])
+    @max_id = Category.maximum(:id).to_i
 
-  # Only allow a list of trusted parameters through.
-  def category_params
-    params.require(:category).permit(:event_id, :content, :status, :user_id, :order)
+    if params[:event_id].blank? || @event.blank?
+      @categories = []
+      flash.alert = 'Url không hợp lệ!'
+      return render(:index)
+    end
+
+    @categories = Category.where(event_id: params[:event_id], status: 1).order(created_at: :asc)
   end
 end
