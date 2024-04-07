@@ -13,6 +13,7 @@ function getIndex() {
 // Tạo giá trị từ controller
 const wish_title = $("#wish_title").val();
 const wish_content = $("#wish_content").val();
+const public_flg = $("#public_flg").val();
 const card_flg = $("#card_flg").val();
 
 // Khởi tạo giá trị index đang chọn
@@ -24,6 +25,13 @@ function setCurrentSelectIndex(selectIndex) {
 
 function getCurrentSelectIndex() {
   return currentSelectIndex;
+}
+
+if (public_flg == 1) {
+  // Ẩn các phần tử
+  $(".tools-board").hide();
+  $(".detail-board").hide();
+  $(".container").addClass("d-flex justify-content-center");
 }
 
 // Xử lý canvas
@@ -212,19 +220,44 @@ function addLayerText(type, content = "", layerDetail = {}) {
   $(`.box-layer-text[index=${indexLayer}] .text-content`).html(content);
 
   // Thêm sự kiện drag
-  $(".box-layer").draggable({
-    drag: function (event, ui) {
-      let indexLayerDrag = $(this).attr("index");
-      let position = $(this).position();
-      console.log(position.top, position.left);
+  if (public_flg != 1) {
+    $(".box-layer").draggable({
+      drag: function (event, ui) {
+        let indexLayerDrag = $(this).attr("index");
+        let position = $(this).position();
+        console.log(position.top, position.left);
 
-      $(`.detail[index=${indexLayerDrag}] .input-text-top`).val(position.top);
+        $(`.detail[index=${indexLayerDrag}] .input-text-top`).val(position.top);
 
-      $(`.detail[index=${indexLayerDrag}] .input-text-left`).val(position.left);
-    },
+        $(`.detail[index=${indexLayerDrag}] .input-text-left`).val(
+          position.left
+        );
+      },
+    });
+  }
+}
+
+// Tải ảnh về
+$("#downloadImage").click(function (event) {
+  event.preventDefault();
+  html2canvas($(".canvas-board")[0]).then(function (canvas) {
+    var link = document.createElement("a");
+    link.download = "image.png";
+    link.href = canvas.toDataURL();
+    link.click();
   });
+});
 
-  // Khi sửa nội dung layer
+if (public_flg != 1) {
+  $(".canvas-board")
+    .on("mouseenter", function () {
+      $(".box-layer").css("border", "1px solid #4a98f7");
+      $(".resizer").css("background-color", "#4a98f7");
+    })
+    .on("mouseleave", function () {
+      $(".box-layer").css("border", "1px solid transparent");
+      $(".resizer").css("background-color", "transparent");
+    });
 }
 
 // Tạo layer text ngắn

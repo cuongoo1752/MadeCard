@@ -1,9 +1,11 @@
 class EventsController < ApplicationController
+  include ApplicationHelper
+  include UsersHelper
   before_action :set_event, only: %i[show edit update destroy]
 
   # GET /events or /events.json
   def index
-    @events = Event.all
+    load_events
   end
 
   def list_wishes
@@ -11,64 +13,66 @@ class EventsController < ApplicationController
     @categories = Category.where(event_id: @event.id)
   end
 
-  # GET /events/1 or /events/1.json
-  def show; end
+  def update_all
+    msg_errors = []
 
-  # GET /events/new
-  def new
-    @event = Event.new
-  end
+    ActiveRecord::Base.transaction do
+      params.each do |key, value|
+        next if value.blank?
 
-  # GET /events/1/edit
-  def edit; end
+        list_key = key.split('@')
 
-  # POST /events or /events.json
-  def create
-    @event = Event.new(event_params)
+        next if list_key.size != 2 || list_key.first != 'type'
 
-    respond_to do |format|
-      if @event.save
-        format.html { redirect_to event_url(@event), notice: 'Event was successfully created.' }
-        format.json { render :show, status: :created, location: @event }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
+        event_id = list_key[1]
+        case value
+        when 'update'
+          event = Event.find_by(id: event_id)
+          if event_id.blank? || event.blank?
+            msg_errors << 'Sự kiện này đã không còn tồn tại!'
+            next
+          end
+
+          if params[:"content@#{event_id}"] == event.content && params[:"status@#{event_id}"].to_i == event.status.to_i
+            next
+          end
+
+          event.update!(
+            content: params[:"content@#{event_id}"],
+            status: params[:"status@#{event_id}"].to_i,
+            updated_at: Time.zone.now,
+            user_id: current_user.id
+          )
+        when 'create'
+          event = Event.find_by(id: event_id)
+          if event_id.blank? || event.present?
+            msg_errors << 'Có lỗi xảy ra!'
+            next
+          end
+
+          next if params[:"content@#{event_id}"].blank?
+
+          Event.create!(
+            content: params[:"content@#{event_id}"],
+            status: params[:"status@#{event_id}"].to_i,
+            created_at: Time.zone.now,
+            user_id: current_user.id
+          )
+        end
       end
     end
-  end
+    load_events
 
-  # PATCH/PUT /events/1 or /events/1.json
-  def update
-    respond_to do |format|
-      if @event.update(event_params)
-        format.html { redirect_to event_url(@event), notice: 'Event was successfully updated.' }
-        format.json { render :show, status: :ok, location: @event }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /events/1 or /events/1.json
-  def destroy
-    @event.destroy
-
-    respond_to do |format|
-      format.html { redirect_to events_url, notice: 'Event was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to events_url, notice: 'Cập nhật sự kiện thành công!'
+  rescue StandardError => e
+    load_events
+    render :index, notice: e.message
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_event
-    @event = Event.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def event_params
-    params.require(:event).permit(:content, :status, :user_id, :order)
+  def load_events
+    @events = Event.where(status: 1).order(created_at: :asc)
+    @max_id = Event.maximum(:id).to_i
   end
 end

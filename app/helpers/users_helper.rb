@@ -15,4 +15,8 @@ module UsersHelper
   def is_current_admin?
     current_user&.role == role_admin
   end
+
+  def get_email_user user_id
+    User.find_by(id: user_id)&.email
+  end
 end

@@ -1,0 +1,20 @@
+<% @fix_pictures.each do |fix_picture| %>
+  <div class="card d-inline-block" style="width: 18rem;">
+    <%= image_tag fix_picture.picture.url, class: "card-img-top" if fix_picture.picture? %>
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <h5 class="card-title"><%= fix_picture.title %></h5>
+        <div class="d-flex">
+          <%= link_to 'Chi tiết', edit_fix_picture_path(fix_picture), class: "btn btn-link btn-sm btn-delete" %>
+          <%= button_to 'Xóa', fix_picture, method: :delete, class: "btn btn-link btn-sm btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
+        </div>
+      </div>
+      <p class="card-text">Người cập nhật: <%= get_email_user(fix_picture.user_id) %><br>
+      Ngày cập nhật: <%= fix_picture.updated_at&.strftime('%I:%M%p %d/%m/%Y') %></p>
+    </div>
+  </div>
+<% end %>
+
+<br>
+
+<%= link_to 'Tạo ảnh mới', new_fix_picture_path, class: "btn btn-link m-2" %>

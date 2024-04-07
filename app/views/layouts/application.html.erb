@@ -14,13 +14,23 @@
   </head>
 
   <body>
-    <%= render "./layouts/navbar.html.erb" %>
+    <% if @public_flg.to_i != 1 %>
+      <%= render "./layouts/navbar.html.erb" %>
+    <% end %>
+
     <% if notice.present? || alert.present? %>
       <div class="container-fluid">
-        <div class="alert alert-success" role="alert">
-          <%= notice %>
-        </div>
-        <p class="alert"><%= alert %></p>
+        <% if notice.present? %>
+          <div class="alert alert-success" role="alert">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <% if alert.present? %>
+          <div class="alert alert-danger" role="alert">
+            <%= alert %>
+          </div>
+        <% end %>
       </div>
     <% end %>
     <%= yield %>

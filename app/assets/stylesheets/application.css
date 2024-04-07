@@ -13,13 +13,13 @@
  *= require_self
  */
 
- /* pagination kaminari */
-.nav-pagination{
+/* pagination kaminari */
+.nav-pagination {
   padding-left: 10px;
   padding-right: 10px;
 }
 
 /* Button */
-.btn-delete{
+.btn-delete {
   font-size: 13px !important;
 }

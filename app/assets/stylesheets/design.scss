@@ -14,7 +14,7 @@ body {
 }
 
 .box {
-  height: 97vh;
+  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -279,7 +279,8 @@ section {
 // handle box-layer
 
 .box-layer {
-  border: 1px solid #4a98f7;
+  // border: 1px solid #4a98f7;
+  border: 1px solid transparent;
   position: absolute;
   top: 70px;
   left: 100px;
@@ -289,7 +290,8 @@ section {
 .resizer {
   width: 8px;
   height: 8px;
-  background-color: #4a98f7;
+  // background-color: #4a98f7;
+  background-color: transparent;
   position: absolute;
   cursor: move;
 }

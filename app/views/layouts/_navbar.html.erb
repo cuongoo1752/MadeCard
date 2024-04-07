@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="<%= root_path %>">Web làm thiệp</a>
+  <a class="navbar-brand" href="<%= root_path %>"><%= image_tag("logo/logo_2.png", size: "50x50", alt: "Edit Entry") %></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -22,21 +22,17 @@
         </div>
       </li>
       <% if is_current_admin? %>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Quản lý lời chúc, sự kiện
-          </a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="<%= events_path %>">Danh sách sự kiện</a>
-            <a class="dropdown-item" href="<%= categories_path %>">Đề mục của sự kiện</a>
-            <a class="dropdown-item" href="<%= wishes_path %>">Danh sách mời chúc</a>
-          </div>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= events_path %>">Quản lý sự kiện</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<%= cards_path(role: role_admin) %>">Quản lý thiệp</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<%= users_path %>">Quản lý người dùng</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= fix_pictures_path %>">Quản lý ảnh</a>
         </li>
       <% end %>
     </ul>

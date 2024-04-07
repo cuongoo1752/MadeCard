@@ -1,16 +1,20 @@
-<br>
-<h1><%= @event.content %></h1>
-<br>
-
-<% @categories.each do |category| %>
-  <div class="media">
-    <div class="media-body">
-      <h3 class="mt-0"><%= category.content %></h3>
-      <br>
-      <% Wish.where(category_id: category.id).each do |wish| %>
-        <p><%= wish.content %> <a class="" href="<%= design_cards_path(wish_id: wish.id) %>">Nhấn vào đây để tạo thiệp</a></p>
-      <% end %>
-    </div>
-  </div>
+<div class="container">
   <br>
-<% end %>
+  <h2><b><%= @event.content %></b></h2>
+  <br>
+
+  <% @categories.each_with_index do |category, index_category| %>
+    <div class="media">
+      <div class="media-body">
+        <h3 class="mt-0">
+          <%= "#{RomanNumerals.to_roman(index_category + 1)}. #{category.content}" %>
+        </h3>
+        <br>
+        <% Wish.where(category_id: category.id).each_with_index do |wish, index_wish| %>
+          <p><%= "#{index_wish.to_i + 1}. #{wish.content}" %> <a class="" href="<%= design_cards_path(wish_id: wish.id) %>">Nhấn vào đây để tạo thiệp</a></p>
+        <% end %>
+      </div>
+    </div>
+    <br>
+  <% end %>
+</div>
