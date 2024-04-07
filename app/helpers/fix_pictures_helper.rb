@@ -1,0 +1,2 @@
+module FixPicturesHelper
+end

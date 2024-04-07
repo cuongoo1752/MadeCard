@@ -1,18 +1,19 @@
 Rails.application.routes.draw do
+  resources :fix_pictures, except: [:show]
   resources :wishes, only: [:index] do
     collection do
-      post "update_all", to: 'wishes#update_all'
+      post 'update_all', to: 'wishes#update_all'
     end
   end
   resources :categories, only: [:index] do
     collection do
-      post "update_all", to: 'categories#update_all'
+      post 'update_all', to: 'categories#update_all'
     end
   end
   resources :events, only: [:index] do
     collection do
       get 'list_wishes', to: 'events#list_wishes'
-      post "update_all", to: 'events#update_all'
+      post 'update_all', to: 'events#update_all'
     end
   end
   resources :texts

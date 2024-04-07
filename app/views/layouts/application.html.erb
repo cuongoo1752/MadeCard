@@ -14,7 +14,10 @@
   </head>
 
   <body>
-    <%= render "./layouts/navbar.html.erb" %>
+    <% if @public_flg.to_i != 1 %>
+      <%= render "./layouts/navbar.html.erb" %>
+    <% end %>
+
     <% if notice.present? || alert.present? %>
       <div class="container-fluid">
         <% if notice.present? %>

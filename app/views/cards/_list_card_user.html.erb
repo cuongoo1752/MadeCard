@@ -1,29 +1,29 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Công khai</th>
-      <th scope="col">Tên</th>
+      <th scope="col">Trạng thái</th>
+      <th scope="col">Địa chỉ thiệp công khai</th>
       <th scope="col">Chỉnh sửa</th>
+      <th scope="col">Xóa</th>
     </tr>
   </thead>
   <tbody>
       <% @cards.each do |card| %>
         <% 
           layers = LayersOnCard.where(card_id: card.id, status: 1)
-          rowspan = (layers.size > 1 ? layers.size : 1)
           email_user = User.find_by(id: card.user_id).email
         %>
 
         <tr>
-          <th scope="row"><%= card.id %></th>
           <td><%= card.is_public ? "Công khai" : "Không công khai" %></td>
-          <td><%= card.name %></td>
           <td>
-            <%= link_to 'Tạo bảo sao', design_cards_path(card_id: card.id) %>
-            <% if card.status == 1 %>
-            / <%= button_to 'Xóa', card, method: :delete, class: "btn btn-link btn-sm btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
-            <% end %>
+            <%= link_to design_cards_url(card_id: card.id, public: 1), design_cards_url(card_id: card.id, public: 1) %>
+          </td>
+          <td>
+            <%= link_to 'Chi tiết', design_cards_path(card_id: card.id), class: "btn btn-light" %>
+          </td>
+          <td>
+            <%= button_to 'Xóa', card, method: :delete, class: "btn btn-light btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
           </td>
         </tr>
       <% end%>
@@ -34,4 +34,4 @@
 
 <br>
 
-<%= link_to 'New Card', new_card_path %>
+<%= link_to 'Tạo thiệp mới', new_card_path, class: "btn btn-link m-2" %>

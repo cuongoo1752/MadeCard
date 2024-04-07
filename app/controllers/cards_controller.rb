@@ -21,6 +21,8 @@ class CardsController < ApplicationController
       @card = Card.find_by(id: params[:card_id], status: 1)
       return if @card.blank?
 
+      @public_flg = 1 if params[:public].to_i == 1
+
       @layers = []
       LayersOnCard.where(card_id: @card.id, status: 1).order(:order).each do |layer_on_card|
         @layers << {
