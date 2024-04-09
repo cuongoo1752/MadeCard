@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :fix_pictures, except: [:show]
+  resources :fix_pictures, except: [:show] do
+    collection do
+      get 'list_image', to: 'fix_pictures#list_image'
+    end
+  end
+
   resources :wishes, only: [:index] do
     collection do
       post 'update_all', to: 'wishes#update_all'

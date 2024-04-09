@@ -1,0 +1,19 @@
+<div class="d-flex">
+  <% @chunked_fix_pictures.each do |chunk| %>
+    <div class="d-flex flex-column">
+      <% chunk.each do |fix_picture| %>
+        <div class="fix-picture card" style="width: 25rem">
+          <%= image_tag fix_picture.picture.url, class: "card-img-top" if fix_picture.picture? %>
+          <div class="card-img-overlay d-flex justify-content-center align-items-center">
+            <div>
+              <%= link_to 'Tạo thiệp', edit_fix_picture_path(fix_picture), class: "create-card btn btn-link btn-delete", style: "color: transparent" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery-ui' %>
+<%= javascript_include_tag 'list_image' %>

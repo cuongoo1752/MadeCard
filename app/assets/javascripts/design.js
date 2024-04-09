@@ -109,15 +109,6 @@ function addLayerText(type, content = "", layerDetail = {}) {
   // Thêm name có index để đánh dấu
   $inputText.attr("name", nameLayer(type, indexLayer));
 
-  let defaultWidthText = 600;
-  let defaultHeightText = 50;
-  let topText = 70;
-  let leftText = 75;
-
-  let defaultWidthTextLong = 600;
-  let defaultHeightTextLong = 200;
-  let topTextLong = 130;
-  let leftTextLong = 75;
   // Tạo detail của text
   let $newDetailLayer = $(".detail-template")
     .clone()

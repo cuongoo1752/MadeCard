@@ -6,6 +6,11 @@ class FixPicturesController < ApplicationController
     @fix_pictures = FixPicture.all
   end
 
+  def list_image
+    @fix_pictures = FixPicture.all
+    @chunked_fix_pictures = @fix_pictures.each_slice((@fix_pictures.length / 4.0).ceil).to_a
+  end
+
   def new
     @fix_picture = FixPicture.new
   end
@@ -16,7 +21,7 @@ class FixPicturesController < ApplicationController
     @fix_picture = FixPicture.new(fix_picture_params.merge(user_id: current_user.id))
 
     if @fix_picture.save
-      redirect_to fix_picture_url(@fix_picture), notice: 'Ảnh đã tạo thành công!'
+      redirect_to fix_pictures_url, notice: 'Ảnh đã tạo thành công!'
     else
       render :new, status: :unprocessable_entity
     end
@@ -24,7 +29,7 @@ class FixPicturesController < ApplicationController
 
   def update
     if @fix_picture.update(fix_picture_params.merge(user_id: current_user.id))
-      redirect_to fix_picture_url(@fix_picture), notice: 'Ảnh đã cập nhật thành công!'
+      redirect_to fix_pictures_url, notice: 'Ảnh đã cập nhật thành công!'
     else
       render :edit, status: :unprocessable_entity
     end
