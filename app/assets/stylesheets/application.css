@@ -23,3 +23,14 @@
 .btn-delete {
   font-size: 13px !important;
 }
+
+/* Chữ hiển thị ở màn font chữ */
+.fake-text{
+  font-size: 40px;
+  line-height: 40px;
+}
+
+.fake-text-index{
+  font-size: 25px;
+  line-height: 25px;
+}

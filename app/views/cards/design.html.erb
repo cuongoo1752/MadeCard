@@ -1,7 +1,15 @@
 <%= stylesheet_link_tag 'design', media: 'all', 'data-turbolinks-track': 'reload' %>
+<style>
+  <% @fix_fonts.each do |fix_font| %>
+    @font-face {
+      font-family: '<%= fix_font.title %>';
+      src: url('<%= fix_font.font.url %>');
+    }
+  <% end %>
+</style>
 
 <%= form_tag(create_card_and_layers_cards_path, class: "box") do %>
-  <div class="container">
+  <div class="container justify-content-center">
     <%# Phần hiển thị các lớp %>
     <section class="tools-board">
       <div class="row">
@@ -50,12 +58,9 @@
           <li class="attribute">
             <div class="label-attribute">Font chữ:</div>
             <select class="input-attribute input-text-font">
-              <option value="Arial">Arial</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="verdana">Verdana</option>
-              <option value="Notosans">Notosans</option>
-              <option value="helvetica">Helvetica</option>
-              <option value="GreatVibes">Great Vibes</option>
+              <% @fix_fonts.each do |fix_font| %>
+                <option value="<%= fix_font.title %>"><%= fix_font.title %></option>
+              <% end %>
             </select>
           </li>
           <li class="attribute">
@@ -122,6 +127,8 @@
 <%= hidden_field_tag 'wish_content', @content.to_s %>
 <%= hidden_field_tag 'public_flg', @public_flg.to_s %>
 <%= hidden_field_tag('card_flg', '1') if @card.present? %>
+<%= hidden_field_tag 'picture_flg', "1" if @fix_picture&.picture&.url.present? %>
+<%= hidden_field_tag 'picture_url', @fix_picture.picture.url.to_s if @fix_picture&.picture&.url.present? %>
 
 <script>
   const layers = <%= @layers.to_json.html_safe %>

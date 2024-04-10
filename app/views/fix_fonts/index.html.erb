@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-between p-3">
+  <div class="">
+    <h3>Danh sách font chữ</h3>
+  </div>
+
+  <div class="">
+    <%= link_to 'Tạo font chữ mới', new_fix_font_path, class: "btn btn-light" %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Tên font chữ</th>
+      <th scope="col">Chữ hiển thị</th>
+      <th scope="col">Ngưởi tạo</th>
+      <th scope="col">Ngày cập nhật</th>
+      <th scope="col">Chi tiết</th>
+      <th scope="col">Xóa</th>
+    </tr>
+  </thead>
+  <tbody class="events">
+    <% @fix_fonts.each do |fix_font| %>
+      <tr>
+        <th scope="row">
+          <%= fix_font.title %>
+        </th>
+        <td>
+          <style>
+            @font-face {
+              font-family: '<%= fix_font.title %>';
+              src: url('<%= fix_font.font.url %>');
+            }
+          </style>
+          <p class="fake-text-index" style="font-family: '<%= fix_font.title %>';">
+            <%= @fake_text %>
+          </p>
+        </td>
+        <td><%= get_email_user(fix_font.user_id) %></td>
+        <td>
+          <%= fix_font.updated_at&.strftime('%I:%M%p %d/%m/%Y') %>
+        </td>
+        <td>
+          <%= link_to 'Sửa', edit_fix_font_path(fix_font), class: "btn btn-light" %>
+        </td>
+        <td>
+          <%= button_to 'Xóa', fix_font, method: :delete, class: "btn btn-light btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
+        </td>
+      </tr>
+    <% end%>
+  </tbody>
+</table>
+

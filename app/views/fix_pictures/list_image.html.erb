@@ -6,7 +6,7 @@
           <%= image_tag fix_picture.picture.url, class: "card-img-top" if fix_picture.picture? %>
           <div class="card-img-overlay d-flex justify-content-center align-items-center">
             <div>
-              <%= link_to 'Tạo thiệp', edit_fix_picture_path(fix_picture), class: "create-card btn btn-link btn-delete", style: "color: transparent" %>
+            <%= link_to 'Tạo thiệp', design_cards_path(fix_picture_id: fix_picture.id), class: "create-card btn btn-link btn-delete", style: "color: transparent" %>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :fix_fonts, except: [:show]
   resources :fix_pictures, except: [:show] do
     collection do
       get 'list_image', to: 'fix_pictures#list_image'

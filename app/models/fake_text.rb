@@ -1,0 +1,2 @@
+class FakeText < ApplicationRecord
+end

@@ -2,7 +2,6 @@ class CardsController < ApplicationController
   include ApplicationHelper
   before_action :set_card, only: %i[show edit update destroy]
 
-  # GET /cards or /cards.json
   def index
     @cards = if params[:role] == role_admin && is_current_admin?
                Card.order(created_at: :desc).page(params[:page])
@@ -12,11 +11,14 @@ class CardsController < ApplicationController
   end
 
   def design
+    @fix_fonts = FixFont.where(status: 1)
     @layers_on_cards = []
     if params[:wish_id].present?
       wish = Wish.where(id: params[:wish_id]).first
       @title = Category.find_by(id: wish.category_id)&.content
       @content = wish&.content
+    elsif params[:fix_picture_id].present?
+      @fix_picture = FixPicture.find_by(id: params[:fix_picture_id])
     elsif params[:card_id].present?
       @card = Card.find_by(id: params[:card_id], status: 1)
       return if @card.blank?
@@ -33,15 +35,12 @@ class CardsController < ApplicationController
     end
   end
 
-  # GET /cards/1 or /cards/1.json
   def show; end
 
-  # GET /cards/new
   def new
     @card = Card.new
   end
 
-  # GET /cards/1/edit
   def edit; end
 
   def create_card_and_layers
@@ -104,48 +103,33 @@ class CardsController < ApplicationController
   def create
     @card = Card.new(card_params)
 
-    respond_to do |format|
-      if @card.save
-        format.html { redirect_to card_url(@card), notice: 'Tạo thiệp thành công!' }
-        format.json { render :show, status: :created, location: @card }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @card.errors, status: :unprocessable_entity }
-      end
+    if @card.save
+      redirect_to card_url(@card), notice: 'Tạo thiệp thành công!'
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /cards/1 or /cards/1.json
   def update
-    respond_to do |format|
-      if @card.update(card_params)
-        format.html { redirect_to card_url(@card), notice: 'Cập nhận thiệp thành công!' }
-        format.json { render :show, status: :ok, location: @card }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @card.errors, status: :unprocessable_entity }
-      end
+    if @card.update(card_params)
+      redirect_to card_url(@card), notice: 'Cập nhận thiệp thành công!'
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /cards/1 or /cards/1.json
   def destroy
     @card.update(delete_params)
 
-    respond_to do |format|
-      format.html { redirect_to cards_url, notice: 'Xóa thiệp thành công!' }
-      format.json { head :no_content }
-    end
+    redirect_to cards_url, notice: 'Xóa thiệp thành công!'
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_card
     @card = Card.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def card_params
     params.require(:card).permit(:is_public, :status, :user_id, :order)
   end
