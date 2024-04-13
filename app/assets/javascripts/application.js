@@ -20,3 +20,4 @@
 //= require events
 //= require categories
 //= require wishes
+//= require list_image

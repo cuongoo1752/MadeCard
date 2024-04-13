@@ -14,6 +14,8 @@ function getIndex() {
 const wish_title = $("#wish_title").val();
 const wish_content = $("#wish_content").val();
 const public_flg = $("#public_flg").val();
+const picture_flg = $("#picture_flg").val();
+const picture_url = $("#picture_url").val();
 const card_flg = $("#card_flg").val();
 
 // Khởi tạo giá trị index đang chọn
@@ -39,15 +41,27 @@ const imageInput = $("#imageInput");
 
 var img = $("<img/>");
 img.on("load", function () {
+  var maxWidth = 800;
+  var maxHeight = 700;
   var canvas = $("<canvas/>")[0];
-  canvas.width = this.width;
-  canvas.height = this.height;
+  var width = this.width;
+  var height = this.height;
+
+  if (width > maxWidth || height > maxHeight) {
+    var ratio = Math.min(maxWidth / width, maxHeight / height);
+    width *= ratio;
+    height *= ratio;
+  }
+
+  canvas.width = width;
+  canvas.height = height;
+
   var ctx = canvas.getContext("2d");
-  ctx.drawImage(this, 0, 0);
+  ctx.drawImage(this, 0, 0, width, height);
 
   $(".canvas-board").append(canvas);
   $("canvas").attr("id", "designCanvas");
-  $(".canvas-board").css("width", this.width).css("height", this.height);
+  $(".canvas-board").css("width", width).css("height", height);
 });
 
 function nameLayer(layerType, indexLayer) {
@@ -57,8 +71,11 @@ function nameLayer(layerType, indexLayer) {
 function nameDetailLayer(layerAttribute, indexLayer) {
   return `detailLayer@${layerAttribute}@${indexLayer}`;
 }
-
-img.attr("src", $("#imageInput").attr("src"));
+if (picture_flg == 1) {
+  img.attr("src", picture_url);
+} else {
+  img.attr("src", $("#imageInput").attr("src"));
+}
 
 function isObjectEmpty(objectName) {
   return (
@@ -109,15 +126,6 @@ function addLayerText(type, content = "", layerDetail = {}) {
   // Thêm name có index để đánh dấu
   $inputText.attr("name", nameLayer(type, indexLayer));
 
-  let defaultWidthText = 600;
-  let defaultHeightText = 50;
-  let topText = 70;
-  let leftText = 75;
-
-  let defaultWidthTextLong = 600;
-  let defaultHeightTextLong = 200;
-  let topTextLong = 130;
-  let leftTextLong = 75;
   // Tạo detail của text
   let $newDetailLayer = $(".detail-template")
     .clone()
@@ -197,6 +205,7 @@ function addLayerText(type, content = "", layerDetail = {}) {
     "font-family": layerDetail["font"],
     color: layerDetail["color"],
     "font-size": layerDetail["size"],
+    "line-height": layerDetail["size"],
     "text-align": layerDetail["text_align"],
     "vertical-align": layerDetail["vertical"],
     width: layerDetail["width"],
@@ -315,10 +324,10 @@ $(document).ready(function () {
 
   $(".input-text-size").change(function () {
     let indexLayer = $(this).attr("index");
-    $(`.box-layer-text[index=${indexLayer}] .text-content`).css(
-      "font-size",
-      `${$(this).val()}px`
-    );
+    $(`.box-layer-text[index=${indexLayer}] .text-content`).css({
+      "font-size": `${$(this).val()}px`,
+      "line-height": `${$(this).val()}px`,
+    });
   });
 
   $(".input-text-align").change(function () {

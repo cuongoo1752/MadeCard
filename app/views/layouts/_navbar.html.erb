@@ -6,6 +6,9 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="<%= list_image_fix_pictures_path %>">Ảnh đẹp</a>
+      </li>
       <% if user_signed_in? %>
         <li class="nav-item active">
           <a class="nav-link" href="<%= cards_path %>">Thiệp của bạn</a>
@@ -31,8 +34,14 @@
         <li class="nav-item">
           <a class="nav-link" href="<%= users_path %>">Quản lý người dùng</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<%= fix_pictures_path %>">Quản lý ảnh</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            Quản lý ảnh, kiểu chữ
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="<%= fix_pictures_path %>">Quản lý ảnh</a>
+            <a class="dropdown-item" href="<%= fix_fonts_path %>">Quản lý font chữ</a>
+          </div>
         </li>
       <% end %>
     </ul>

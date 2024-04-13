@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_07_064627) do
+ActiveRecord::Schema.define(version: 2024_04_10_145932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,12 +48,30 @@ ActiveRecord::Schema.define(version: 2024_04_07_064627) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
+  create_table "fake_texts", force: :cascade do |t|
+    t.text "content"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "fix_fonts", force: :cascade do |t|
+    t.string "title"
+    t.bigint "user_id", null: false
+    t.string "font"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_fix_fonts_on_user_id"
+  end
+
   create_table "fix_pictures", force: :cascade do |t|
     t.string "title"
     t.bigint "user_id", null: false
     t.string "picture"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status"
     t.index ["user_id"], name: "index_fix_pictures_on_user_id"
   end
 
@@ -136,6 +154,7 @@ ActiveRecord::Schema.define(version: 2024_04_07_064627) do
   add_foreign_key "categories", "events"
   add_foreign_key "categories", "users"
   add_foreign_key "events", "users"
+  add_foreign_key "fix_fonts", "users"
   add_foreign_key "fix_pictures", "users"
   add_foreign_key "layers_on_cards", "cards"
   add_foreign_key "layers_on_cards", "users"
