@@ -95,11 +95,11 @@
               <option class="text-italic" value="italic">In nghiêng</option>
             </select>
           </li>
-          <li class="attribute">
+          <li class="attribute attribute-width">
             <div class="label-attribute">Chiều rộng:</div>
             <input class="input-attribute input-number input-text-width" type="number" min="1" max="1000">
           </li>
-          <li class="attribute">
+          <li class="attribute attribute-height">
             <div class="label-attribute">Chiều dài:</div>
             <input class="input-attribute input-number input-text-height" type="number" min="1" max="1000">
           </li>
@@ -134,7 +134,8 @@
   const layers = <%= @layers.to_json.html_safe %>
 </script>
 
-<%= javascript_include_tag 'jquery' %>
-<%= javascript_include_tag 'jquery-ui' %>
-<%= javascript_include_tag 'html2canvas' %>
+<%= javascript_include_tag 'lib/jquery' %>
+<%= javascript_include_tag 'lib/jquery-ui' %>
+<%= javascript_include_tag 'lib/html2canvas' %>
+<%= javascript_include_tag 'lib/interact' %>
 <%= javascript_include_tag 'design' %>

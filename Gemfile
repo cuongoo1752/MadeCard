@@ -31,6 +31,7 @@ gem 'bootstrap-kaminari-views'
 gem 'carrierwave'
 gem 'devise', '~> 4.1'
 gem 'kaminari'
+gem 'rails-i18n', '~> 6.0'
 gem 'roman-numerals'
 gem 'rubocop'
 

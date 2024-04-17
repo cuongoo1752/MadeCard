@@ -44,7 +44,7 @@ class FixFontsController < ApplicationController
   end
 
   def destroy
-    @fix_font.update(status:)
+    @fix_font.update(status: 9)
 
     redirect_to fix_fonts_url, notice: 'Xóa font chữ thành công!'
   end

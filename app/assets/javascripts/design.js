@@ -10,6 +10,9 @@ function getIndex() {
   return index;
 }
 
+// Khởi tại giá tại positions
+var positions = {};
+
 // Tạo giá trị từ controller
 const wish_title = $("#wish_title").val();
 const wish_content = $("#wish_content").val();
@@ -85,6 +88,29 @@ function isObjectEmpty(objectName) {
   );
 }
 
+// Chọn vào hiện thị phần chi tiết của layer
+function selectAndDisplayDetail(indexCurrent) {
+  if (indexCurrent == getCurrentSelectIndex()) {
+    return;
+  }
+
+  setCurrentSelectIndex(indexCurrent);
+  $(".detail").attr("style", "display: none;");
+  $(`.detail[index="${getCurrentSelectIndex()}"]`).attr(
+    "style",
+    "display: block;"
+  );
+}
+
+// Cập nhật giá trị vị trí
+function updatePositionLayer(event) {
+  let indexCurrent = $(event.target).attr("index");
+  let position = $(event.target).position();
+  $(`.detail[index=${indexCurrent}] .input-text-top`).val(position.top);
+  $(`.detail[index=${indexCurrent}] .input-text-left`).val(position.left);
+}
+
+// Thêm layer text mới
 function addLayerText(type, content = "", layerDetail = {}) {
   // Giá giá trị mặc định
   if (isObjectEmpty(layerDetail)) {
@@ -228,19 +254,61 @@ function addLayerText(type, content = "", layerDetail = {}) {
 
   $(`.box-layer-text[index=${indexLayer}] .text-content`).html(content);
 
-  // Thêm sự kiện drag
   if (public_flg != 1) {
-    $(".box-layer").draggable({
-      drag: function (event, ui) {
-        let indexLayerDrag = $(this).attr("index");
-        let position = $(this).position();
-        console.log(position.top, position.left);
+    // Thêm sự kiện thay đổi kích thước phẩn tử
+    positions[`index@${indexLayer}`] = { x: 0, y: 0 };
+    interact(".box-layer").resizable({
+      edges: { top: true, left: true, bottom: true, right: true },
+      listeners: {
+        move: function (event) {
+          let { x, y } = event.target.dataset;
+          x = (parseFloat(x) || 0) + event.deltaRect.left;
+          y = (parseFloat(y) || 0) + event.deltaRect.top;
 
-        $(`.detail[index=${indexLayerDrag}] .input-text-top`).val(position.top);
+          let indexCurrent = $(event.target).attr("index");
+          // Chỉnh kích thước ô
+          Object.assign(event.target.style, {
+            width: `${event.rect.width}px`,
+            height: `${event.rect.height}px`,
+            transform: `translate(${x}px, ${y}px)`,
+          });
+          // Gán chiều dài, chiều rộng vào input form
+          $(`.detail[index=${indexCurrent}] .input-text-width`).val(
+            event.rect.width
+          );
+          $(`.detail[index=${indexCurrent}] .input-text-height`).val(
+            event.rect.height
+          );
 
-        $(`.detail[index=${indexLayerDrag}] .input-text-left`).val(
-          position.left
-        );
+          // Lưu giá trị
+          event.target.dataset.x = x;
+          event.target.dataset.y = y;
+          positions[`index@${indexCurrent}`].x = x;
+          positions[`index@${indexCurrent}`].y = y;
+          selectAndDisplayDetail(indexCurrent);
+          updatePositionLayer(event);
+        },
+      },
+    });
+
+    // Thêm sự kiện phẩn tử có thể di chuyển
+    interact(".box-layer").draggable({
+      listeners: {
+        start(event) {},
+        move(event) {
+          let indexCurrent = $(event.target).attr("index");
+          positions[`index@${indexCurrent}`].x += event.dx;
+          positions[`index@${indexCurrent}`].y += event.dy;
+          let x = positions[`index@${indexCurrent}`].x;
+          let y = positions[`index@${indexCurrent}`].y;
+          selectAndDisplayDetail(indexCurrent);
+
+          // Lưu giá trị
+          event.target.style.transform = `translate(${x}px, ${y}px)`;
+          event.target.dataset.x = x;
+          event.target.dataset.y = y;
+          updatePositionLayer(event);
+        },
       },
     });
   }
@@ -295,14 +363,10 @@ $(".layers").on("click", ".layer", function () {
   $(".layer").removeClass("layer-select");
   let $layerSelect = $(this).closest(".layer");
   $layerSelect.addClass("layer-select");
-  setCurrentSelectIndex($layerSelect.attr("index"));
+  let indexCurrent = $layerSelect.attr("index");
 
-  // Thêm chi tiết layer
-  $(".detail").attr("style", "display: none;");
-  $(`.detail[index="${getCurrentSelectIndex()}"]`).attr(
-    "style",
-    "display: block;"
-  );
+  // Hiển thị chi tiết layer
+  selectAndDisplayDetail(indexCurrent);
 });
 
 $(document).ready(function () {
@@ -383,7 +447,6 @@ if (card_flg == 1) {
       case "Text":
         let layerDetail = layer["layer_detail"];
         let type = layerDetail["is_long"] ? "textLong" : "text";
-        console.log(layerDetail);
         addLayerText(type, layerDetail["content"], layerDetail);
         break;
     }

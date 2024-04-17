@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MadeCard</title>
+    <title>Làm thiệp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -35,6 +35,6 @@
     <% end %>
     <%= yield %>
   </body>
-  <%= javascript_include_tag 'jquery_slim', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'bootstrap_bundle', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'lib/jquery_slim', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'lib/bootstrap_bundle', media: 'all', 'data-turbolinks-track': 'reload' %>
 </html>
