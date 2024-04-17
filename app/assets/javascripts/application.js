@@ -13,8 +13,9 @@
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-//= require jquery
-//= require html2canvas
+//= require lib/jquery
+//= require lib/html2canvas
+//= require lib/interact
 //= require custom
 //= require design
 //= require events

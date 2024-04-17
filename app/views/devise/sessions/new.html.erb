@@ -1,26 +1,33 @@
-<h2>Thông tin đăng nhập</h2>
+<div class="container d-flex justify-content-center d-flex align-items-center" style="height: 75vh;">
+  <div>
+    <%= image_tag("logo/logo_2.png", size: "50x50", alt: "Edit Entry") %>
+    <h5 class="pt-3 pb-2"><b>Thông tin đăng nhập</b></h5>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email, "Địa chỉ email" %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-group">
+        <%= f.label :email, "Địa chỉ email" %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Mật khẩu" %><br />
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="form-group">
+          <div class="form-check">
+            <%= f.check_box :remember_me, class: "form-check-input" %>
+            <%= f.label :remember_me, "Nhớ tài khoản", class: "form-check-label" %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Đăng nhập", class: "btn btn-light" %>
+      </div>
+      <%= render "devise/shared/links" %>
+    <% end %>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :password, "Mật khẩu" %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Đăng nhập" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
