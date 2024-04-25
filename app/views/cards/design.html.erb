@@ -18,7 +18,6 @@
           <li class="layer">
             <input type="checkbox" class="select">
             <input type="text" class="type-text" placeholder="Ảnh bìa" disabled>
-            <%= image_tag("background/back.jpg", alt: "Ảnh bìa", style: "display: none", id: "imageInput") %>
           </li>
           <li class="layer layer-template-text"  style="display: none;">
             <input type="checkbox" class="select">
@@ -121,14 +120,16 @@
   </div>
 
   <%= hidden_field_tag 'index', 1 %>
+  <% if @fix_picture&.picture&.url.present? %>
+    <%= hidden_field_tag 'fix_picture_id', @fix_picture.id  %>
+    <%= image_tag(@fix_picture&.picture&.url, alt: "Ảnh bìa", style: "display: none", id: "imageInput") %>
+  <% end %>
 <% end %>
 
 <%= hidden_field_tag 'wish_title', @title.to_s %>
 <%= hidden_field_tag 'wish_content', @content.to_s %>
 <%= hidden_field_tag 'public_flg', @public_flg.to_s %>
 <%= hidden_field_tag('card_flg', '1') if @card.present? %>
-<%= hidden_field_tag 'picture_flg', "1" if @fix_picture&.picture&.url.present? %>
-<%= hidden_field_tag 'picture_url', @fix_picture.picture.url.to_s if @fix_picture&.picture&.url.present? %>
 
 <script>
   const layers = <%= @layers.to_json.html_safe %>

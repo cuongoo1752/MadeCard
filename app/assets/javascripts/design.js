@@ -17,8 +17,6 @@ var positions = {};
 const wish_title = $("#wish_title").val();
 const wish_content = $("#wish_content").val();
 const public_flg = $("#public_flg").val();
-const picture_flg = $("#picture_flg").val();
-const picture_url = $("#picture_url").val();
 const card_flg = $("#card_flg").val();
 
 // Khởi tạo giá trị index đang chọn
@@ -74,11 +72,7 @@ function nameLayer(layerType, indexLayer) {
 function nameDetailLayer(layerAttribute, indexLayer) {
   return `detailLayer@${layerAttribute}@${indexLayer}`;
 }
-if (picture_flg == 1) {
-  img.attr("src", picture_url);
-} else {
-  img.attr("src", $("#imageInput").attr("src"));
-}
+img.attr("src", $("#imageInput").attr("src"));
 
 function isObjectEmpty(objectName) {
   return (

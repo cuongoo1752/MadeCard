@@ -11,26 +11,44 @@ class CardsController < ApplicationController
   end
 
   def design
-    @fix_fonts = FixFont.where(status: 1)
     @layers_on_cards = []
     if params[:wish_id].present?
+      # Vào từ màn lời chúc
       wish = Wish.where(id: params[:wish_id]).first
       @title = Category.find_by(id: wish.category_id)&.content
       @content = wish&.content
     elsif params[:fix_picture_id].present?
+      # Vào từ màn ảnh 
       @fix_picture = FixPicture.find_by(id: params[:fix_picture_id])
     elsif params[:card_id].present?
+      # Vào từ màn danh sách thiệp
       @card = Card.find_by(id: params[:card_id], status: 1)
-      return if @card.blank?
+      if @card.present?
+        @public_flg = 1 if params[:public].to_i == 1
 
-      @public_flg = 1 if params[:public].to_i == 1
+        # Lấy ảnh nền
+        @fix_picture = FixPicture.find_by(id: @card.fix_picture_id)
 
-      @layers = []
-      LayersOnCard.where(card_id: @card.id, status: 1).order(:order).each do |layer_on_card|
-        @layers << {
-          layer_type: layer_on_card.layer_type,
-          layer_detail: layer_on_card.layer
-        }
+        # Lấy dữ liệu các layer
+        @layers = []
+        LayersOnCard.where(card_id: @card.id, status: 1).order(:order).each do |layer_on_card|
+          @layers << {
+            layer_type: layer_on_card.layer_type,
+            layer_detail: layer_on_card.layer
+          }
+        end
+      end
+    end
+
+    # Load các giá trị
+    @fix_pictures = FixPicture.where(status: 1)
+    @fix_fonts = FixFont.where(status: 1)
+    return unless @fix_picture&.picture.to_s.blank?
+
+    @fix_pictures.each do |fix_picture|
+      if fix_picture&.picture.present?
+        @fix_picture = fix_picture
+        break
       end
     end
   end
@@ -49,6 +67,7 @@ class CardsController < ApplicationController
     params_create_card = {
       is_public: true,
       user_id: get_user_id_request,
+      fix_picture_id: params[:fix_picture_id],
       order: get_max_order(Card)
     }.merge(create_params)
     @card = Card.create! params_create_card
@@ -93,7 +112,7 @@ class CardsController < ApplicationController
     end
 
     if @card
-      redirect_to card_url(@card), notice: 'Đã tạo thiệp thành công'
+      redirect_to cards_url, notice: 'Đã tạo thiệp thành công'
     else
       render :new, status: :unprocessable_entity
     end
