@@ -331,6 +331,41 @@ if (public_flg != 1) {
     });
 }
 
+const MAX_LENGTH_NAME_IMAGE = 18;
+// Tạo ảnh mới
+function addImage() {
+  // Tạo layer ở phần các lớp
+  let indexLayer = AddAndGetIndex();
+  let type = "image";
+  let $newLayer = $(`.layer-template-${type}`)
+    .clone()
+    .removeClass(`layer-template-${type}`)
+    .removeAttr("style")
+    .attr("index", indexLayer);
+  $(".layers").append($newLayer);
+
+  // Đánh dấu các indexLayer tương ứng
+  let $inputImage = $(`.layer[index=${indexLayer}] .input-file`);
+  $inputImage.attr("index", indexLayer);
+  $inputImage.attr("id", `actual-btn-${indexLayer}`);
+  $inputImage.attr("name", nameLayer(type, indexLayer));
+
+  let $labelImage = $(`.layer[index=${indexLayer}] .label-file`);
+  $labelImage.attr("for", `actual-btn-${indexLayer}`);
+
+  let $spanImage = $(`.layer[index=${indexLayer}] .span-image`);
+  $spanImage.attr("id", `file-chosen-${indexLayer}`);
+
+  // Thêm sự kiện cho input
+  $(`#actual-btn-${indexLayer}`).change(function () {
+    let nameFile = this.files[0].name;
+    if (nameFile.length >= MAX_LENGTH_NAME_IMAGE) {
+      nameFile = `${nameFile.substring(0, MAX_LENGTH_NAME_IMAGE - 3)}...`;
+    }
+    $(`#file-chosen-${indexLayer}`).text(nameFile);
+  });
+}
+
 // Tạo layer text ngắn
 $("#addText").click(function (event) {
   event.preventDefault();
@@ -341,6 +376,12 @@ $("#addText").click(function (event) {
 $("#addLongText").click(function (event) {
   event.preventDefault();
   addLayerText("textLong");
+});
+
+// Tạo layer ảnh
+$("#addImage").click(function (event) {
+  event.preventDefault();
+  addImage();
 });
 
 // Xóa layer
@@ -450,3 +491,5 @@ if (card_flg == 1) {
   addLayerText("text", wish_title);
   addLayerText("textLong", wish_content);
 }
+
+addImage();
