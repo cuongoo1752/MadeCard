@@ -8,7 +8,7 @@
   <% end %>
 </style>
 
-<%= form_tag(create_card_and_layers_cards_path, class: "box") do %>
+<%= form_tag(create_card_and_layers_cards_path, class: "box", enctype: "multipart/form-data") do %>
   <div class="container justify-content-center">
     <%# Phần hiển thị các lớp %>
     <section class="tools-board">
@@ -31,7 +31,7 @@
           </li>
           <li class="layer layer-template-image" style="display: none;">
             <input type="checkbox" class="select">
-            <input type="file" class="input-file" id="actual-btn-index" hidden/>
+            <input type="file" class="input-file" id="actual-btn-index" style="display: none;"/>
             <label class="label-file" for="actual-btn-index">
               <%= image_tag("icon/upload.svg", alt: "Tải lên", class: "svg-upload") %>
               <span class="span-image" id="file-chosen-index">Chưa có file</span>
@@ -46,6 +46,13 @@
     <div class="canvas-board">
       <div class="box-layer box-layer-text box-layer-text-template" style="display: none;">
         <p class="text-content"></p>
+        <div class="resizer top-left"></div>
+        <div class="resizer top-right"></div>
+        <div class="resizer bottom-left"></div>
+        <div class="resizer bottom-right"></div>
+      </div>
+      <div class="box-layer box-layer-image box-layer-image-template" style="display: none;">
+        <%= image_tag("", alt: "Ảnh", class: "image-content") %>
         <div class="resizer top-left"></div>
         <div class="resizer top-right"></div>
         <div class="resizer bottom-left"></div>
@@ -109,6 +116,18 @@
           <input class="input-attribute input-text-top" type="hidden">
           <input class="input-attribute input-text-left" type="hidden">
         </ul>
+        <ul class="detail detail-image-template" style="display: none;">
+          <li class="attribute attribute-width">
+            <div class="label-attribute">Chiều rộng:</div>
+            <input class="input-attribute input-number input-image-width" type="number" min="1" max="1000">
+          </li>
+          <li class="attribute attribute-height">
+            <div class="label-attribute">Chiều dài:</div>
+            <input class="input-attribute input-number input-image-height" type="number" min="1" max="1000">
+          </li>
+          <input class="input-attribute input-image-top" type="hidden">
+          <input class="input-attribute input-image-left" type="hidden">
+        </ul>
       </div>
 
       <div class="row buttons">
@@ -118,7 +137,9 @@
           <button id="addLongText" class="add-layer">Thêm lời chúc dài</button>
         </div>
         <button id="addImage" class="add-layer">Thêm ảnh</button>
-        <button id="addImageAndTextBtn" class="add-layer">Lưu thiết kế</button>
+        <% if user_signed_in? %>
+          <button id="addImageAndTextBtn" class="add-layer">Lưu thiết kế</button>
+        <% end %>
         <button id="downloadImage" class="add-layer">Tải về ảnh</button>
       </div>
     </section>

@@ -105,6 +105,14 @@ class CardsController < ApplicationController
           params_text[:"#{attribute}"] = params[:"detailLayer@#{attribute}@#{layer_index}"]
         end
         params_layer_on_card[:layer] = Text.create!(params_text)
+      when "image"
+        params_text = {
+          url: params[:"layer@image@#{layer_index}"]
+        }.merge(create_params)
+        %w[width height top left].each do |attribute|
+          params_text[:"#{attribute}"] = params[:"detailLayer@#{attribute}@#{layer_index}"]
+        end
+        params_layer_on_card[:layer] = Image.create!(params_text)
       end
 
       # Tạo layer

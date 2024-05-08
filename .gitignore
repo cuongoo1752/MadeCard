@@ -25,6 +25,8 @@
 /public/assets
 /public/tmp
 .byebug_history
+public/uploads/image
+public/uploads/tmp
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key

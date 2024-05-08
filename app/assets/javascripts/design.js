@@ -97,11 +97,72 @@ function selectAndDisplayDetail(indexCurrent) {
 }
 
 // Cập nhật giá trị vị trí
-function updatePositionLayer(event) {
+function updatePositionLayer(event, type) {
   let indexCurrent = $(event.target).attr("index");
   let position = $(event.target).position();
-  $(`.detail[index=${indexCurrent}] .input-text-top`).val(position.top);
-  $(`.detail[index=${indexCurrent}] .input-text-left`).val(position.left);
+  $(`.detail[index=${indexCurrent}] .input-${type}-top`).val(position.top);
+  $(`.detail[index=${indexCurrent}] .input-${type}-left`).val(position.left);
+}
+
+function addEventDrag(indexLayer, type) {
+  if (public_flg != 1) {
+    // Thêm sự kiện thay đổi kích thước phẩn tử
+    positions[`index@${indexLayer}`] = { x: 0, y: 0 };
+    interact(".box-layer").resizable({
+      edges: { top: true, left: true, bottom: true, right: true },
+      listeners: {
+        move: function (event) {
+          let { x, y } = event.target.dataset;
+          x = (parseFloat(x) || 0) + event.deltaRect.left;
+          y = (parseFloat(y) || 0) + event.deltaRect.top;
+
+          let indexCurrent = $(event.target).attr("index");
+          // Chỉnh kích thước ô
+          Object.assign(event.target.style, {
+            width: `${event.rect.width}px`,
+            height: `${event.rect.height}px`,
+            transform: `translate(${x}px, ${y}px)`,
+          });
+          // Gán chiều dài, chiều rộng vào input form
+          $(`.detail[index=${indexCurrent}] .input-${type}-width`).val(
+            event.rect.width
+          );
+          $(`.detail[index=${indexCurrent}] .input-${type}-height`).val(
+            event.rect.height
+          );
+
+          // Lưu giá trị
+          event.target.dataset.x = x;
+          event.target.dataset.y = y;
+          positions[`index@${indexCurrent}`].x = x;
+          positions[`index@${indexCurrent}`].y = y;
+          selectAndDisplayDetail(indexCurrent);
+          updatePositionLayer(event, type);
+        },
+      },
+    });
+
+    // Thêm sự kiện phẩn tử có thể di chuyển
+    interact(".box-layer").draggable({
+      listeners: {
+        start(event) {},
+        move(event) {
+          let indexCurrent = $(event.target).attr("index");
+          positions[`index@${indexCurrent}`].x += event.dx;
+          positions[`index@${indexCurrent}`].y += event.dy;
+          let x = positions[`index@${indexCurrent}`].x;
+          let y = positions[`index@${indexCurrent}`].y;
+          selectAndDisplayDetail(indexCurrent);
+
+          // Lưu giá trị
+          event.target.style.transform = `translate(${x}px, ${y}px)`;
+          event.target.dataset.x = x;
+          event.target.dataset.y = y;
+          updatePositionLayer(event, type);
+        },
+      },
+    });
+  }
 }
 
 // Thêm layer text mới
@@ -248,64 +309,7 @@ function addLayerText(type, content = "", layerDetail = {}) {
 
   $(`.box-layer-text[index=${indexLayer}] .text-content`).html(content);
 
-  if (public_flg != 1) {
-    // Thêm sự kiện thay đổi kích thước phẩn tử
-    positions[`index@${indexLayer}`] = { x: 0, y: 0 };
-    interact(".box-layer").resizable({
-      edges: { top: true, left: true, bottom: true, right: true },
-      listeners: {
-        move: function (event) {
-          let { x, y } = event.target.dataset;
-          x = (parseFloat(x) || 0) + event.deltaRect.left;
-          y = (parseFloat(y) || 0) + event.deltaRect.top;
-
-          let indexCurrent = $(event.target).attr("index");
-          // Chỉnh kích thước ô
-          Object.assign(event.target.style, {
-            width: `${event.rect.width}px`,
-            height: `${event.rect.height}px`,
-            transform: `translate(${x}px, ${y}px)`,
-          });
-          // Gán chiều dài, chiều rộng vào input form
-          $(`.detail[index=${indexCurrent}] .input-text-width`).val(
-            event.rect.width
-          );
-          $(`.detail[index=${indexCurrent}] .input-text-height`).val(
-            event.rect.height
-          );
-
-          // Lưu giá trị
-          event.target.dataset.x = x;
-          event.target.dataset.y = y;
-          positions[`index@${indexCurrent}`].x = x;
-          positions[`index@${indexCurrent}`].y = y;
-          selectAndDisplayDetail(indexCurrent);
-          updatePositionLayer(event);
-        },
-      },
-    });
-
-    // Thêm sự kiện phẩn tử có thể di chuyển
-    interact(".box-layer").draggable({
-      listeners: {
-        start(event) {},
-        move(event) {
-          let indexCurrent = $(event.target).attr("index");
-          positions[`index@${indexCurrent}`].x += event.dx;
-          positions[`index@${indexCurrent}`].y += event.dy;
-          let x = positions[`index@${indexCurrent}`].x;
-          let y = positions[`index@${indexCurrent}`].y;
-          selectAndDisplayDetail(indexCurrent);
-
-          // Lưu giá trị
-          event.target.style.transform = `translate(${x}px, ${y}px)`;
-          event.target.dataset.x = x;
-          event.target.dataset.y = y;
-          updatePositionLayer(event);
-        },
-      },
-    });
-  }
+  addEventDrag(indexLayer, "text");
 }
 
 // Tải ảnh về
@@ -331,9 +335,43 @@ if (public_flg != 1) {
     });
 }
 
+function addDetailImage(type, indexLayer, width, height, top, left) {
+  // Tạo detail của image
+  let $newDetailLayer = $(".detail-image-template")
+    .clone()
+    .removeClass("detail-image-template")
+    .removeAttr("style")
+    .attr("index", indexLayer);
+  $(".row-board").append($newDetailLayer);
+
+  // Chiều rộng
+  $(`.detail[index=${indexLayer}] .input-${type}-width`)
+    .attr("name", nameDetailLayer("width", indexLayer))
+    .attr("index", indexLayer)
+    .val(width);
+
+  // Chiều dài
+  $(`.detail[index=${indexLayer}] .input-${type}-height`)
+    .attr("name", nameDetailLayer("height", indexLayer))
+    .attr("index", indexLayer)
+    .val(height);
+
+  // Top
+  $(`.detail[index=${indexLayer}] .input-${type}-top`)
+    .attr("name", nameDetailLayer("top", indexLayer))
+    .attr("index", indexLayer)
+    .val(top);
+
+  // Left
+  $(`.detail[index=${indexLayer}] .input-${type}-left`)
+    .attr("name", nameDetailLayer("left", indexLayer))
+    .attr("index", indexLayer)
+    .val(left);
+}
+
 const MAX_LENGTH_NAME_IMAGE = 18;
 // Tạo ảnh mới
-function addImage() {
+function addImage(layerDetail = {}) {
   // Tạo layer ở phần các lớp
   let indexLayer = AddAndGetIndex();
   let type = "image";
@@ -356,14 +394,89 @@ function addImage() {
   let $spanImage = $(`.layer[index=${indexLayer}] .span-image`);
   $spanImage.attr("id", `file-chosen-${indexLayer}`);
 
+  // Tạo box text
+  let $newBoxLayerImage = $(`.box-layer-${type}-template`)
+    .clone()
+    .removeClass(`box-layer-${type}-template`)
+    .addClass(`box-layer-${type}-${indexLayer}`)
+    .attr("index", indexLayer);
+  $(".canvas-board").append($newBoxLayerImage);
+
+  // Hiển thị ảnh đã được lưu
+  if (!isObjectEmpty(layerDetail)) {
+    $(`#file-chosen-${indexLayer}`).text("abc.png");
+    $(`.box-layer-${type}-${indexLayer}`).removeAttr("style");
+    $(`.box-layer-${type}-${indexLayer} .image-content`).attr(
+      "src",
+      layerDetail.url.url
+    );
+    $(`.box-layer-${type}-${indexLayer}`).css({
+      width: layerDetail["width"],
+      height: layerDetail["height"],
+      top: layerDetail["top"],
+      left: layerDetail["left"],
+    });
+    addDetailImage(
+      type,
+      indexLayer,
+      layerDetail.width,
+      layerDetail.height,
+      layerDetail.top,
+      layerDetail.left
+    );
+  }
+
   // Thêm sự kiện cho input
   $(`#actual-btn-${indexLayer}`).change(function () {
-    let nameFile = this.files[0].name;
+    let fileInput = this.files[0];
+    let nameFile = fileInput.name;
     if (nameFile.length >= MAX_LENGTH_NAME_IMAGE) {
       nameFile = `${nameFile.substring(0, MAX_LENGTH_NAME_IMAGE - 3)}...`;
     }
     $(`#file-chosen-${indexLayer}`).text(nameFile);
+
+    if (fileInput) {
+      // Hiện thị layer
+      $(`.box-layer-${type}-${indexLayer}`).removeAttr("style");
+
+      // Hiển thị ảnh
+      const reader = new FileReader();
+      let maxWidth = 300;
+      let maxHeight = 300;
+      var width = 0;
+      var height = 0;
+      reader.onload = function (e) {
+        $(`.box-layer-${type}-${indexLayer} .image-content`).attr(
+          "src",
+          e.target.result
+        );
+
+        var img = new Image();
+        img.src = e.target.result;
+        img.onload = function () {
+          // Cập nhật lại độ dài cho phù hợp
+          width = this.width;
+          height = this.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            var ratio = Math.min(maxWidth / width, maxHeight / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+          }
+
+          $(`.box-layer-${type}-${indexLayer}`).css({
+            width: `${width}px`,
+            height: `${height}px`,
+          });
+
+          addDetailImage(type, indexLayer, width, height, 0, 0);
+        };
+      };
+      reader.readAsDataURL(fileInput);
+    }
   });
+
+  addEventDrag(indexLayer, "image");
 }
 
 // Tạo layer text ngắn
@@ -478,11 +591,18 @@ $(document).ready(function () {
 
 if (card_flg == 1) {
   layers.forEach(function (layer) {
+    let layerDetail = layer["layer_detail"];
+
     switch (layer.layer_type) {
       case "Text":
-        let layerDetail = layer["layer_detail"];
         let type = layerDetail["is_long"] ? "textLong" : "text";
         addLayerText(type, layerDetail["content"], layerDetail);
+        break;
+      case "Image":
+        addImage(layerDetail);
+        console.log(layerDetail.url.url);
+        console.log(layerDetail);
+        console.log("Có image");
         break;
     }
   });
@@ -492,4 +612,4 @@ if (card_flg == 1) {
   addLayerText("textLong", wish_content);
 }
 
-addImage();
+// addImage();
