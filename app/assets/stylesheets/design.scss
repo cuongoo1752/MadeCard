@@ -66,7 +66,13 @@ section {
   overflow: auto;
   height: 420px;
 }
-.detail-picture {
+
+.row-board{
+  height: 386px;
+}
+
+.detail-picture,
+.detail-text {
   margin: 0;
   overflow: auto;
   height: 386px;
