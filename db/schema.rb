@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_10_145932) do
+ActiveRecord::Schema.define(version: 2024_05_08_174859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2024_04_10_145932) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
+    t.integer "fix_picture_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
@@ -81,6 +82,10 @@ ActiveRecord::Schema.define(version: 2024_04_10_145932) do
     t.integer "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "width"
+    t.integer "height"
+    t.integer "top"
+    t.integer "left"
   end
 
   create_table "layers", force: :cascade do |t|
