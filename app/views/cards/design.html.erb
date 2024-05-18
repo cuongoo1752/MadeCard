@@ -65,6 +65,18 @@
     <section class="detail-board">
       <div class="row row-board">
         <label class="title">Thuộc tính của lớp</label>
+        <ul class="detail detail-picture" index="0">
+          <% @fix_pictures.each do |fix_picture| %>
+            <div class="fix-picture card" style="width: 100%" cardId=<%= fix_picture.id %>>
+              <%= image_tag fix_picture.picture.url, class: "card-img-top" if fix_picture.picture? %>
+              <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                <div>
+                  <button class="select-background btn btn-link btn-delete" style="color: transparent"  cardId=<%= fix_picture.id %>>Chọn ảnh</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </ul>
         <ul class="detail detail-template" style="display: none;">
           <li class="attribute">
             <div class="label-attribute">Font chữ:</div>
@@ -118,11 +130,11 @@
           <input class="input-attribute input-text-left" type="hidden">
         </ul>
         <ul class="detail detail-image-template" style="display: none;">
-          <li class="attribute attribute-width">
+          <li class="attribute attribute-width"  style="display: none;">
             <div class="label-attribute">Chiều rộng:</div>
             <input class="input-attribute input-number input-image-width" type="number" min="1" max="1000">
           </li>
-          <li class="attribute attribute-height">
+          <li class="attribute attribute-height"  style="display: none;">
             <div class="label-attribute">Chiều dài:</div>
             <input class="input-attribute input-number input-image-height" type="number" min="1" max="1000">
           </li>
@@ -133,11 +145,10 @@
 
       <div class="row buttons">
         <div class="add-buttons">
-          <button id="addText" class="add-layer add-text-botton">Thêm lời chúc</button>
+          <button id="addLongText" class="add-layer">Thêm lời chúc</button>
           <div class="space"></div>
-          <button id="addLongText" class="add-layer">Thêm lời chúc dài</button>
+          <button id="addImage" class="add-layer">Thêm ảnh</button>
         </div>
-        <button id="addImage" class="add-layer">Thêm ảnh</button>
         <% if user_signed_in? %>
           <button id="addImageAndTextBtn" class="add-layer">Lưu thiết kế</button>
         <% end %>
@@ -149,7 +160,6 @@
   <%= hidden_field_tag 'index', 1 %>
   <% if @fix_picture&.picture&.url.present? %>
     <%= hidden_field_tag 'fix_picture_id', @fix_picture.id  %>
-    <%= image_tag(@fix_picture&.picture&.url, alt: "Ảnh bìa", style: "display: none", id: "imageInput") %>
   <% end %>
 <% end %>
 

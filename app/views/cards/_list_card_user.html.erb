@@ -1,44 +1,51 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Trạng thái</th>
+      <th scope="col">Ảnh nền</th>
+      <th scope="col">Ảnh sử dụng</th>
+      <th scope="col">Lời chúc</th>
       <th scope="col">Địa chỉ thiệp công khai</th>
-      <th scope="col">Chỉnh sửa</th>
-      <th scope="col">Xóa</th>
+      <th scope="col">Tạo thiệp tương tự</th>
+      <th scope="col">Ản</th>
     </tr>
   </thead>
   <tbody>
       <% @cards.each do |card| %>
         <% 
           layers = LayersOnCard.where(card_id: card.id, status: 1)
+          texts = LayersOnCard.where(card_id: card.id, status: 1, layer_type: "Text")
+          images = LayersOnCard.where(card_id: card.id, status: 1, layer_type: "Image")
           email_user = User.find_by(id: card.user_id).email
+          fix_picture = FixPicture.find_by(id: card.fix_picture_id)
         %>
 
         <tr>
-          <td><%= card.is_public ? "Công khai" : "Không công khai" %></td>
+          <td>
+            <%= image_tag fix_picture.picture.url, class: "card-img-top", style: "width: 5rem;" if fix_picture.picture? %>
+          </td>
+          <td>
+            <% images.each do |image| %>
+              <%= image_tag image&.layer&.url&.url, class: "card-img-top", style: "width: 5rem;" if image&.layer&.url&.url.present? %>
+            <% end %>
+          </td>
+          <td>
+            <% texts.each do |text| %>
+              <%= text&.layer&.content %><br>
+            <% end %>
+          </td>
           <td>
             <%= link_to design_cards_url(card_id: card.id, public: 1), design_cards_url(card_id: card.id, public: 1) %>
           </td>
           <td>
-            <%= link_to 'Chi tiết', design_cards_path(card_id: card.id), class: "btn btn-light" %>
+            <%= link_to 'Tạo thiệp tương tự', design_cards_path(card_id: card.id), class: "btn btn-light" %>
           </td>
           <td>
-            <%= button_to 'Xóa', card, method: :delete, class: "btn btn-light btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
+            <%= button_to 'Ẩn', card, method: :delete, class: "btn btn-light btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
           </td>
         </tr>
-      <% end%>
+      <% end %>
   </tbody>
 </table>
-
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="..." alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div>
-
 <%= paginate @cards %>
 
 <br>
