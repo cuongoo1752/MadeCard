@@ -336,6 +336,9 @@ if (public_flg != 1) {
 }
 
 function addDetailImage(type, indexLayer, width, height, top, left) {
+  // Xóa các phần tử cũ khi update
+  $(`.detail[index=${indexLayer}]`).remove();
+
   // Tạo detail của image
   let $newDetailLayer = $(".detail-image-template")
     .clone()
@@ -370,6 +373,15 @@ function addDetailImage(type, indexLayer, width, height, top, left) {
 }
 
 const MAX_LENGTH_NAME_IMAGE = 18;
+
+function getNameFileLayer(nameFile) {
+  nameFile = nameFile.split("/").pop();
+  // Nếu lớp hơn maxLength ký tự thì thêm dấu 3 chấm
+  if (nameFile.length >= MAX_LENGTH_NAME_IMAGE) {
+    nameFile = `${nameFile.substring(0, MAX_LENGTH_NAME_IMAGE - 3)}...`;
+  }
+  return nameFile;
+}
 // Tạo ảnh mới
 function addImage(layerDetail = {}) {
   // Tạo layer ở phần các lớp
@@ -404,12 +416,15 @@ function addImage(layerDetail = {}) {
 
   // Hiển thị ảnh đã được lưu
   if (!isObjectEmpty(layerDetail)) {
-    $(`#file-chosen-${indexLayer}`).text("abc.png");
+    $(`#file-chosen-${indexLayer}`).text(getNameFileLayer(layerDetail.url.url));
     $(`.box-layer-${type}-${indexLayer}`).removeAttr("style");
     $(`.box-layer-${type}-${indexLayer} .image-content`).attr(
       "src",
       layerDetail.url.url
     );
+    $(`.layer[index=${indexLayer}] .old-image`)
+      .attr("name", `layer@${type}-old@${indexLayer}`)
+      .attr("value", layerDetail.id);
     $(`.box-layer-${type}-${indexLayer}`).css({
       width: layerDetail["width"],
       height: layerDetail["height"],
@@ -429,15 +444,15 @@ function addImage(layerDetail = {}) {
   // Thêm sự kiện cho input
   $(`#actual-btn-${indexLayer}`).change(function () {
     let fileInput = this.files[0];
-    let nameFile = fileInput.name;
-    if (nameFile.length >= MAX_LENGTH_NAME_IMAGE) {
-      nameFile = `${nameFile.substring(0, MAX_LENGTH_NAME_IMAGE - 3)}...`;
-    }
+    let nameFile = getNameFileLayer(fileInput.name);
     $(`#file-chosen-${indexLayer}`).text(nameFile);
 
     if (fileInput) {
       // Hiện thị layer
       $(`.box-layer-${type}-${indexLayer}`).removeAttr("style");
+
+      // Xóa đánh dấu ảnh cũ
+      $(`.layer[index=3] .old-image`).remove();
 
       // Hiển thị ảnh
       const reader = new FileReader();
@@ -611,5 +626,3 @@ if (card_flg == 1) {
   addLayerText("text", wish_title);
   addLayerText("textLong", wish_content);
 }
-
-// addImage();

@@ -18,7 +18,7 @@ class CardsController < ApplicationController
       @title = Category.find_by(id: wish.category_id)&.content
       @content = wish&.content
     elsif params[:fix_picture_id].present?
-      # Vào từ màn ảnh 
+      # Vào từ màn ảnh
       @fix_picture = FixPicture.find_by(id: params[:fix_picture_id])
     elsif params[:card_id].present?
       # Vào từ màn danh sách thiệp
@@ -105,9 +105,15 @@ class CardsController < ApplicationController
           params_text[:"#{attribute}"] = params[:"detailLayer@#{attribute}@#{layer_index}"]
         end
         params_layer_on_card[:layer] = Text.create!(params_text)
-      when "image"
+      when 'image', 'image-old'
+        image_url = params[:"layer@image@#{layer_index}"]
+        if params[:"layer@image@#{layer_index}"].blank?
+          image_url = Image.find_by(id: params[:"layer@image-old@#{layer_index}"]).url
+        end
+        next if image_url.blank?
+
         params_text = {
-          url: params[:"layer@image@#{layer_index}"]
+          url: image_url
         }.merge(create_params)
         %w[width height top left].each do |attribute|
           params_text[:"#{attribute}"] = params[:"detailLayer@#{attribute}@#{layer_index}"]
