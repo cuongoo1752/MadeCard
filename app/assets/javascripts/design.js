@@ -10,6 +10,8 @@ function getIndex() {
   return index;
 }
 
+var cardIdCurrent = -1;
+
 // Khởi tại giá tại positions
 var positions = {};
 
@@ -72,7 +74,6 @@ function nameLayer(layerType, indexLayer) {
 function nameDetailLayer(layerAttribute, indexLayer) {
   return `detailLayer@${layerAttribute}@${indexLayer}`;
 }
-img.attr("src", $("#imageInput").attr("src"));
 
 function isObjectEmpty(objectName) {
   return (
@@ -452,7 +453,7 @@ function addImage(layerDetail = {}) {
       $(`.box-layer-${type}-${indexLayer}`).removeAttr("style");
 
       // Xóa đánh dấu ảnh cũ
-      $(`.layer[index=3] .old-image`).remove();
+      $(`.layer[index=${indexLayer}] .old-image`).remove();
 
       // Hiển thị ảnh
       const reader = new FileReader();
@@ -493,12 +494,6 @@ function addImage(layerDetail = {}) {
 
   addEventDrag(indexLayer, "image");
 }
-
-// Tạo layer text ngắn
-$("#addText").click(function (event) {
-  event.preventDefault();
-  addLayerText("text");
-});
 
 // Tạo layer text dài
 $("#addLongText").click(function (event) {
@@ -603,6 +598,60 @@ $(document).ready(function () {
     $(`.box-layer-text[index=${indexLayer}] .text-content`).text($(this).val());
   });
 });
+
+// Xử lý sử kiện hover image
+$(".fix-picture")
+  .on("mouseenter", function () {
+    let cardId = $(this).find(".select-background").attr("cardId");
+    if (cardId != cardIdCurrent) {
+      $(this).find(".select-background").css({
+        color: "#007bff",
+      });
+    }
+  })
+  .on("mouseleave", function () {
+    let cardId = $(this).find(".select-background").attr("cardId");
+    if (cardId != cardIdCurrent) {
+      $(this).find(".select-background").css({
+        color: "transparent",
+      });
+    }
+  });
+
+function selectBackgroundIndex(cardId) {
+  // Xóa đánh dấu các phần tử trước
+  $(".fix-picture").css("border", "1px solid rgba(0,0,0,.125)");
+  $(".select-background")
+    .css({
+      color: "transparent",
+    })
+    .html("Chọn ảnh");
+
+  // Hiển thị hiệu ứng chọn ảnh
+  cardIdCurrent = cardId;
+  $(`.fix-picture[cardId=${cardIdCurrent}]`).css("border", "1px solid #4a98f7");
+  $(`.select-background[cardId=${cardIdCurrent}]`)
+    .css({
+      color: "#007bff",
+    })
+    .html("Đang chọn");
+
+  // Hiển thị ảnh
+  $("#designCanvas").remove();
+  let imageSrc = $(`.fix-picture[cardId=${cardIdCurrent}] .card-img-top`).attr("src")
+  img.attr("src", imageSrc);
+  $("#fix_picture_id").attr("value", cardIdCurrent);
+}
+
+$(".select-background").click(function (event) {
+  event.preventDefault();
+  let cardId = $(this).attr("cardId");
+  console.log(cardId);
+  selectBackgroundIndex(cardId);
+});
+
+// Khởi tạo ảnh
+selectBackgroundIndex($("#fix_picture_id").attr("value"))
 
 if (card_flg == 1) {
   layers.forEach(function (layer) {

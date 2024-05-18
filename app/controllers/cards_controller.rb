@@ -41,7 +41,7 @@ class CardsController < ApplicationController
     end
 
     # Load các giá trị
-    @fix_pictures = FixPicture.where(status: 1)
+    @fix_pictures = FixPicture.where(status: 1).order(created_at: :asc)
     @fix_fonts = FixFont.where(status: 1)
     return unless @fix_picture&.picture.to_s.blank?
 
@@ -154,7 +154,7 @@ class CardsController < ApplicationController
   def destroy
     @card.update(delete_params)
 
-    redirect_to cards_url, notice: 'Xóa thiệp thành công!'
+    redirect_to cards_url, notice: 'Ẩn thiệp thành công!'
   end
 
   private
