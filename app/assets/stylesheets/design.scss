@@ -67,8 +67,8 @@ section {
   height: 420px;
 }
 
-.row-board{
-  height: 386px;
+.row-board {
+  height: 435px;
 }
 
 .detail-picture,
@@ -200,6 +200,7 @@ section {
 
 .add-buttons {
   display: flex;
+  width: 100%;
 }
 
 .space {
@@ -225,6 +226,32 @@ section {
     contrast(96%);
   margin: 3px;
   margin-top: 8px;
+}
+
+.svg-button {
+  width: 11px;
+  filter: invert(100%) sepia(4%) saturate(347%) hue-rotate(106deg)
+    brightness(100%) contrast(97%);
+}
+
+#addLongText {
+  width: 120%;
+}
+
+#invite-button {
+  width: 10px;
+}
+
+#image-button {
+  width: 12px;
+}
+
+#download-button {
+  width: 11px;
+}
+
+#save-button {
+  width: 12px;
 }
 
 .layer-select {

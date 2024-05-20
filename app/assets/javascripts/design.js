@@ -186,8 +186,8 @@ function addLayerText(type, content = "", layerDetail = {}) {
     layerDetail = {
       color: "#000000",
       content: content,
-      font: "Arial",
-      size: 15,
+      font: "NotoSans",
+      size: 18,
       text_align: "Left",
       text_type: "normal",
       vertical: "top",
@@ -528,6 +528,7 @@ $(".layers").on("click", ".delete-layer", function () {
   let indexLayer = $(this).closest(".layer").attr("index");
   $(this).closest(".layer").remove();
   $(`.box-layer-text[index=${indexLayer}]`).remove();
+  $(`.box-layer-image[index=${indexLayer}]`).remove();
   $(`.detail[index=${indexLayer}]`).remove();
 });
 
