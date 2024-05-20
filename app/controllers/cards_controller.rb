@@ -126,7 +126,7 @@ class CardsController < ApplicationController
     end
 
     if @card
-      redirect_to cards_url, notice: 'Đã tạo thiệp thành công'
+      redirect_to cards_url(card_new_id: @card.id), notice: 'Đã tạo thiệp thành công'
     else
       render :new, status: :unprocessable_entity
     end

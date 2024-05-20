@@ -2,9 +2,90 @@
 <h2>Danh sách thiệp</h2>
 <br>
 
+<% is_view_admin = false %>
 <% if params[:role] == role_admin && is_current_admin? %>
-  <%= render "list_card_admin.html.erb" %>
-<% else %>
-  <%= render "list_card_user.html.erb" %>
+  <% is_view_admin = true %>
 <% end %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <% if is_view_admin %>
+        <th scope="col">Id thiệp</th>
+      <% end %>
+      <th scope="col">Ảnh nền</th>
+      <th scope="col">Ảnh sử dụng</th>
+      <th scope="col">Lời chúc</th>
+      <th scope="col">Địa chỉ thiệp công khai</th>
+      <th scope="col">Tạo thiệp tương tự</th>
+      <th scope="col">Ản</th>
+      <% if is_view_admin %>
+        <th scope="col">Trạng thái</th>
+        <th scope="col">Ngày tạo</th>
+        <th scope="col">Người tạo</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @cards.each do |card| %>
+      <% 
+        layers = LayersOnCard.where(card_id: card.id, status: 1)
+        texts = LayersOnCard.where(card_id: card.id, status: 1, layer_type: "Text")
+        images = LayersOnCard.where(card_id: card.id, status: 1, layer_type: "Image")
+        email_user = User.find_by(id: card.user_id).email
+        fix_picture = FixPicture.find_by(id: card.fix_picture_id)
+      %>
+
+      <tr>
+        <% if is_view_admin %>
+          <td>
+            <%= card.id %>
+          </td>
+        <% end %>
+        <td>
+          <%= image_tag fix_picture.picture.url, class: "card-img-top", style: "width: 5rem;" if fix_picture&.picture? %>
+        </td>
+        <td>
+          <% images.each do |image| %>
+            <%= image_tag image&.layer&.url&.url, class: "card-img-top", style: "width: 5rem;" if image&.layer&.url&.url.present? %>
+          <% end %>
+        </td>
+        <td>
+          <% if params[:card_new_id].present? && card.id == params[:card_new_id].to_i %>
+            <p class="mb-0" style="color: #f1999b">Mới tạo thành công!<p><br>
+          <% end %>
+          <% texts.each do |text| %>
+            <%= text&.layer&.content %><br>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to design_cards_url(card_id: card.id, public: 1), design_cards_url(card_id: card.id, public: 1) %>
+        </td>
+        <td>
+          <%= link_to 'Tạo thiệp tương tự', design_cards_path(card_id: card.id), class: "btn btn-light" %>
+        </td>
+        <td>
+          <%= button_to 'Ẩn', card, method: :delete, class: "btn btn-light btn-delete", data: { confirm: 'Bạn có chắc không?' } %>
+        </td>
+        <% if is_view_admin %>
+          <td>
+            <%= card.status == 1 ? "Đang hoạt động" : "Đã ẩn" %>
+          </td>
+          <td>
+            <%= card.created_at&.strftime('%I:%M%p %d/%m/%Y') %>
+          </td>
+          <td>
+            <%= email_user == "not_login@gmail.com" ? "Tài khoản chưa đăng nhập" : email_user %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @cards %>
+
+<br>
+
+<%= link_to 'Tạo thiệp mới', design_cards_path, class: "btn btn-link m-2" %>
+
 

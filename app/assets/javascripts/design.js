@@ -39,9 +39,6 @@ if (public_flg == 1) {
   $(".container").addClass("d-flex justify-content-center");
 }
 
-// Xử lý canvas
-const imageInput = $("#imageInput");
-
 var img = $("<img/>");
 img.on("load", function () {
   var maxWidth = 800;
@@ -89,20 +86,30 @@ function selectAndDisplayDetail(indexCurrent) {
     return;
   }
 
-  setCurrentSelectIndex(indexCurrent);
+  // Hiển thị UI layer
+  $(".layer").removeClass("layer-select");
+  $(`.layer[index=${indexCurrent}]`).addClass("layer-select");
+
+  // Hiển thị checkbox
+  $(".select").prop("checked", false);
+  $(`.layer[index=${indexCurrent}] .select`).prop("checked", true);
+
+  // Hiểu thị detail
   $(".detail").attr("style", "display: none;");
-  $(`.detail[index="${getCurrentSelectIndex()}"]`).attr(
-    "style",
-    "display: block;"
-  );
+  $(`.detail[index="${indexCurrent}"]`).attr("style", "display: block;");
+
+  // Lưu giá trị index đang chọn hiện tại
+  setCurrentSelectIndex(indexCurrent);
 }
 
 // Cập nhật giá trị vị trí
 function updatePositionLayer(event, type) {
   let indexCurrent = $(event.target).attr("index");
   let position = $(event.target).position();
-  $(`.detail[index=${indexCurrent}] .input-${type}-top`).val(position.top);
-  $(`.detail[index=${indexCurrent}] .input-${type}-left`).val(position.left);
+  $(`.detail[index=${indexCurrent}] .input-text-top`).val(position.top);
+  $(`.detail[index=${indexCurrent}] .input-text-left`).val(position.left);
+  $(`.detail[index=${indexCurrent}] .input-image-top`).val(position.top);
+  $(`.detail[index=${indexCurrent}] .input-image-left`).val(position.left);
 }
 
 function addEventDrag(indexLayer, type) {
@@ -125,10 +132,16 @@ function addEventDrag(indexLayer, type) {
             transform: `translate(${x}px, ${y}px)`,
           });
           // Gán chiều dài, chiều rộng vào input form
-          $(`.detail[index=${indexCurrent}] .input-${type}-width`).val(
+          $(`.detail[index=${indexCurrent}] .input-image-width`).val(
             event.rect.width
           );
-          $(`.detail[index=${indexCurrent}] .input-${type}-height`).val(
+          $(`.detail[index=${indexCurrent}] .input-image-height`).val(
+            event.rect.height
+          );
+          $(`.detail[index=${indexCurrent}] .input-text-width`).val(
+            event.rect.width
+          );
+          $(`.detail[index=${indexCurrent}] .input-text-height`).val(
             event.rect.height
           );
 
@@ -173,8 +186,8 @@ function addLayerText(type, content = "", layerDetail = {}) {
     layerDetail = {
       color: "#000000",
       content: content,
-      font: "Arial",
-      size: 12,
+      font: "NotoSans",
+      size: 18,
       text_align: "Left",
       text_type: "normal",
       vertical: "top",
@@ -286,14 +299,17 @@ function addLayerText(type, content = "", layerDetail = {}) {
   $(`.box-layer-text[index=${indexLayer}]`).css({
     "font-family": layerDetail["font"],
     color: layerDetail["color"],
-    "font-size": layerDetail["size"],
-    "line-height": layerDetail["size"],
     "text-align": layerDetail["text_align"],
     "vertical-align": layerDetail["vertical"],
     width: layerDetail["width"],
     height: layerDetail["height"],
     top: layerDetail["top"],
     left: layerDetail["left"],
+  });
+
+  $(`.box-layer-text[index=${indexLayer}] .text-content`).css({
+    "font-size": `${layerDetail["size"]}px`,
+    "line-height": `${layerDetail["size"]}px`,
   });
 
   if (layerDetail["text_type"] == "bold") {
@@ -512,18 +528,13 @@ $(".layers").on("click", ".delete-layer", function () {
   let indexLayer = $(this).closest(".layer").attr("index");
   $(this).closest(".layer").remove();
   $(`.box-layer-text[index=${indexLayer}]`).remove();
+  $(`.box-layer-image[index=${indexLayer}]`).remove();
   $(`.detail[index=${indexLayer}]`).remove();
 });
 
 // Khi click và layer
 $(".layers").on("click", ".layer", function () {
-  // Hiển thị UI layer
-  $(".layer").removeClass("layer-select");
-  let $layerSelect = $(this).closest(".layer");
-  $layerSelect.addClass("layer-select");
-  let indexCurrent = $layerSelect.attr("index");
-
-  // Hiển thị chi tiết layer
+  let indexCurrent = $(this).closest(".layer").attr("index");
   selectAndDisplayDetail(indexCurrent);
 });
 
@@ -638,7 +649,9 @@ function selectBackgroundIndex(cardId) {
 
   // Hiển thị ảnh
   $("#designCanvas").remove();
-  let imageSrc = $(`.fix-picture[cardId=${cardIdCurrent}] .card-img-top`).attr("src")
+  let imageSrc = $(`.fix-picture[cardId=${cardIdCurrent}] .card-img-top`).attr(
+    "src"
+  );
   img.attr("src", imageSrc);
   $("#fix_picture_id").attr("value", cardIdCurrent);
 }
@@ -646,12 +659,12 @@ function selectBackgroundIndex(cardId) {
 $(".select-background").click(function (event) {
   event.preventDefault();
   let cardId = $(this).attr("cardId");
-  console.log(cardId);
   selectBackgroundIndex(cardId);
 });
 
 // Khởi tạo ảnh
-selectBackgroundIndex($("#fix_picture_id").attr("value"))
+selectBackgroundIndex($("#fix_picture_id").attr("value"));
+selectAndDisplayDetail(0);
 
 if (card_flg == 1) {
   layers.forEach(function (layer) {
@@ -664,9 +677,6 @@ if (card_flg == 1) {
         break;
       case "Image":
         addImage(layerDetail);
-        console.log(layerDetail.url.url);
-        console.log(layerDetail);
-        console.log("Có image");
         break;
     }
   });

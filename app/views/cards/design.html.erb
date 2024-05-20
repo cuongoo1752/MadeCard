@@ -15,7 +15,7 @@
       <div class="row">
         <label class="title">Các lớp</label>
         <ul class="layers">
-          <li class="layer">
+          <li class="layer" index="0">
             <input type="checkbox" class="select">
             <input type="text" class="type-text" placeholder="Ảnh bìa" disabled>
           </li>
@@ -77,7 +77,7 @@
             </div>
           <% end %>
         </ul>
-        <ul class="detail detail-template" style="display: none;">
+        <ul class="detail detail-template detail-text" style="display: none;">
           <li class="attribute">
             <div class="label-attribute">Font chữ:</div>
             <select class="input-attribute input-text-font">
@@ -102,7 +102,7 @@
               <option class="align-right" value="Right">Phải</option>
             </select>
           </li>
-          <li class="attribute">
+          <li class="attribute" style="display: none;">
             <div class="label-attribute">Căn dọc:</div>
             <select class="input-attribute input-text-vertical">
               <option class="text-top" value="top">Trên</option>
@@ -118,11 +118,11 @@
               <option class="text-italic" value="italic">In nghiêng</option>
             </select>
           </li>
-          <li class="attribute attribute-width">
+          <li class="attribute attribute-width"  style="display: none;">
             <div class="label-attribute">Chiều rộng:</div>
             <input class="input-attribute input-number input-text-width" type="number" min="1" max="1000">
           </li>
-          <li class="attribute attribute-height">
+          <li class="attribute attribute-height"  style="display: none;">
             <div class="label-attribute">Chiều dài:</div>
             <input class="input-attribute input-number input-text-height" type="number" min="1" max="1000">
           </li>
@@ -144,15 +144,27 @@
       </div>
 
       <div class="row buttons">
-        <div class="add-buttons">
-          <button id="addLongText" class="add-layer">Thêm lời chúc</button>
+        <div class="add-buttons d-flex">
+          <button id="addLongText" class="add-layer">
+            <%= image_tag("icon/Invite.svg", alt: "", class: "svg-button", id: "invite-button") %>
+            Thêm lời chúc
+          </button>
           <div class="space"></div>
-          <button id="addImage" class="add-layer">Thêm ảnh</button>
+          <button id="addImage" class="add-layer">
+            <%= image_tag("icon/Image.svg", alt: "", class: "svg-button", id: "image-button") %>
+            Thêm ảnh
+          </button>
         </div>
         <% if user_signed_in? %>
-          <button id="addImageAndTextBtn" class="add-layer">Lưu thiết kế</button>
+          <button id="addImageAndTextBtn" class="add-layer">
+            <%= image_tag("icon/Save.svg", alt: "", class: "svg-button", id: "save-button") %>
+            Lưu thiết kế
+          </button>
         <% end %>
-        <button id="downloadImage" class="add-layer">Tải về ảnh</button>
+        <button id="downloadImage" class="add-layer">
+          <%= image_tag("icon/Download.svg", alt: "", class: "svg-button", id: "download-button") %>
+          Tải về ảnh
+        </button>
       </div>
     </section>
   </div>
